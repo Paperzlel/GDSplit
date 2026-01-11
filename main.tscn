@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsdg37o7r8hq"]
+
+[ext_resource type="Script" uid="uid://b7upfwnqrwpjf" path="res://scripts/contents.gd" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://dntcwlewxq6uw" path="res://types/timer.tscn" id="2_h2yge"]
+
+[node name="contents" type="VBoxContainer"]
+offset_right = 300.0
+offset_bottom = 42.0
+script = ExtResource("1_0xm2m")
+
+[node name="timer" parent="." instance=ExtResource("2_h2yge")]
+layout_direction = 3
+layout_mode = 2
+size_flags_vertical = 1

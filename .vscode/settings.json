@@ -1,0 +1,29 @@
+{
+    "godotTools.editorPath.godot4": "/home/paperzlel/.local/share/godot/app_userdata/Godot Version Manager/versions/Godot_v4.5.1-stable_mono_linux_x86_64/Godot_v4.5.1-stable_mono_linux.x86_64",
+    "todohighlight.isEnable": true,
+    "todohighlight.isCaseSensitive": false,
+    "todohighlight.keywords": [
+        {
+            "text": "TODO:",
+            "color": "#E41717",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "overviewRulerColor": "rgba(255,189,42,0.8)"
+        },
+        {
+            "text": "FIXME:",
+            "color": "#E41717",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "overviewRulerColor": "rgba(240,98,146,0.8)"
+        },
+        {
+            "text": "NOTE:",
+            "color": "#1BB73A",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        {
+            "text": "WARNING:",
+            "color": "#f36709",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+        }
+    ],
+}

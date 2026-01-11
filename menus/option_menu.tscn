@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcava5wmgkdjc"]
+
+[ext_resource type="Script" uid="uid://b3ajn6qx8xnrn" path="res://scripts/menus/option_menu.gd" id="1_f02io"]
+
+[node name="option_menu" type="MarginContainer"]
+offset_right = 160.0
+offset_bottom = 185.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_f02io")
+
+[node name="list" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="edit_splits" type="Button" parent="list"]
+layout_mode = 2
+text = "Edit Splits"
+
+[node name="open_split_file" type="Button" parent="list"]
+layout_mode = 2
+text = "Open Split File"
+
+[node name="separator" type="Control" parent="list"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="open_layout_file" type="Button" parent="list"]
+layout_mode = 2
+text = "Open Layout File"
+
+[node name="options" type="Button" parent="list"]
+layout_mode = 2
+text = "Options"
+
+[node name="exit" type="Button" parent="list"]
+layout_mode = 2
+text = "Exit"
