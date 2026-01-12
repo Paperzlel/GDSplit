@@ -42,9 +42,20 @@ func save_config() -> Dictionary:
 
 
 ## Implementation of the `LType` class function.
-func apply_config(cfg: Dictionary) -> void:
+func apply_config(cfg: Dictionary) -> bool:
+	if !cfg.get("splits_visible"):
+		push_error("Failed to get the visible split count from 
+			the dictionary")
+		return false
 	splits_visible = cfg["splits_visible"]
+
+	if !cfg.get("splits_until_end"):
+		push_error("Failed to get the number of splits until end
+			from the dictionary")
+		return false
 	splits_until_move = cfg["splits_until_move"]
+	
+	return true
 
 
 func _ready() -> void:

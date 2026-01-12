@@ -32,8 +32,10 @@ func _on_time_reset() -> void:
 func save_config() -> Dictionary:
 	return { "color": _default_color }
 
-func apply_config(cfg: Dictionary) -> void:
+func apply_config(cfg: Dictionary) -> bool:
 	if cfg.get("color") == null:
 		printerr("Failed to get color from dictionary.")
+		return false
 	
 	_default_color = cfg["color"]
+	return true

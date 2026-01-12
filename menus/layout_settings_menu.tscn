@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://cqwi875lf84jv"]
+
+[node name="layout_settings_menu" type="HBoxContainer"]
+custom_minimum_size = Vector2(400, 300)
+offset_right = 800.0
+offset_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="left_context_menu" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="option_list" type="VBoxContainer" parent="left_context_menu"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="add_element" type="Button" parent="left_context_menu/option_list"]
+layout_mode = 2
+text = "Add Element"
+
+[node name="remove_element" type="Button" parent="left_context_menu/option_list"]
+layout_mode = 2
+text = "Remove Element"
+
+[node name="move_up" type="Button" parent="left_context_menu/option_list"]
+layout_mode = 2
+text = "Move Up"
+
+[node name="move_down" type="Button" parent="left_context_menu/option_list"]
+layout_mode = 2
+text = "Move Down"
+
+[node name="separator" type="Control" parent="left_context_menu/option_list"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="layout_settings" type="Button" parent="left_context_menu/option_list"]
+layout_mode = 2
+text = "Layout Settings"
+
+[node name="clear_layout" type="Button" parent="left_context_menu/option_list"]
+layout_mode = 2
+text = "Clear Layout"
+
+[node name="right_bg" type="ColorRect" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.5229999, 0.5229999, 0.5229999, 1)
+
+[node name="bg_margin" type="MarginContainer" parent="right_bg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 20
+
+[node name="inner_menu" type="ColorRect" parent="right_bg/bg_margin"]
+layout_mode = 2
+color = Color(0.7362823, 0.7362823, 0.7362822, 1)
+
+[node name="menu_margin" type="MarginContainer" parent="right_bg/bg_margin/inner_menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 6
+
+[node name="menu_list" type="VBoxContainer" parent="right_bg/bg_margin/inner_menu/menu_margin"]
+layout_mode = 2

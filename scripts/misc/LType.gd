@@ -10,4 +10,4 @@ extends Control
 func save_config() -> Dictionary
 
 @abstract
-func apply_config(cfg: Dictionary) -> void
+func apply_config(cfg: Dictionary) -> bool

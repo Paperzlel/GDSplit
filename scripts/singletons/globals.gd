@@ -60,6 +60,100 @@ enum ColumnType
 	SEGMENT_DELTA_SEGMENT_TIME,
 }
 
+## Global variables
+
+## The version in a string format
+var version_str: String = "0.1.0"
+## The path used to load the config file.
+var config_path: String = "user://config.json"
+
+var _current_save_path: String = ""
+var _current_save_name: String = ""
+
+# Global config functions.
+
+
+## Check to see if the LinuxSplit API version is out of date. 
+## Update when LinuxSplit changes the API, only on major versions past 1.0.0
+func version_out_of_sync(_version: String) -> bool:
+	return false
+
+
+## Updates the dictionary from the old version stored in the config
+## to the new version stored in the binary.
+func update_version(_file: Dictionary) -> void:
+	pass
+
+
+## Checks and runs the update functions if needed. Notifies the user
+## that changes will be made.
+func check_and_update_if_needed(file: Dictionary) -> void:
+	if !version_out_of_sync(file["version"]):
+		return
+	OS.alert(
+		"File version " + file["version"] + " is out-of-date (current version is " + version_str + "). Performing version update...",
+		"Upgrade Version?")
+	update_version(file)
+
+
 
 func _ready() -> void:
 	$"/root".set_script(main_window_script)
+
+	## Create the default config file if this is the
+	## first time booting the app.
+	if !FileAccess.file_exists(config_path):
+		var n_file: FileAccess = FileAccess.open(config_path, FileAccess.WRITE)
+		
+		var default: Dictionary
+		default["version"] = version_str
+		default["last_file"] = ""
+		default["last_layout"] = ""
+
+		n_file.store_string(JSON.stringify(default, "\t"))
+		n_file.close()
+		return
+	
+	var fa: FileAccess = FileAccess.open(config_path, FileAccess.READ)
+	var dict: Dictionary = JSON.parse_string(fa.get_as_text())
+	fa.close()
+	check_and_update_if_needed(dict)
+	
+	## No previous layouts have been used, send the default theme
+	## over
+	if String(dict["last_file"]).is_empty():
+		var default_timer_config: Dictionary = Dictionary()
+		default_timer_config["color"] = Color.WHITE
+
+		var default_timer: Dictionary = Dictionary()
+		default_timer["config"] = default_timer_config
+		default_timer["type"] = "LTimer"
+		
+		var default_contents: Array[Dictionary]
+		default_contents.append(default_timer)
+
+		var default_layout: Dictionary = Dictionary()
+		default_layout["version"] = version_str
+		default_layout["contents"] = default_contents
+		
+		# Created default entry, send it to the layout metadata to be parsed.
+		LayoutMetadata.parse_layout_file_metadata(default_layout)
+	
+	if String(dict["last_layout"]).is_empty():
+		return
+
+	if !FileAccess.file_exists(dict["last_file"]):
+		OS.alert("File \"" + dict["last_file"] + "\" no longer exists.")
+	else:
+		fa = FileAccess.open(config_path, FileAccess.READ)
+		var data_dict: Dictionary = JSON.parse_string(fa.get_as_text())
+		if !SplitMetadata.parse_split_file_metadata(data_dict):
+			OS.alert("Invalid metadata in file " + dict["last_file"] + ", unable to continue.", "Split Parse Error")
+
+	if !FileAccess.file_exists(dict["last_layout"]):
+		OS.alert("File \"" + dict["last_file"] + "\" no longer exists.")
+	else:
+		fa = FileAccess.open(config_path, FileAccess.READ)
+		var layout_dict: Dictionary = JSON.parse_string(fa.get_as_text())
+		if !LayoutMetadata.parse_layout_file_metadata(layout_dict):
+			OS.alert("Invalid metadata in file " + dict["last_layout"] + ", unable to continue.", "Layout Parse Error")

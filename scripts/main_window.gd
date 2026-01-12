@@ -141,8 +141,8 @@ func show_subwindow(window: Window) -> void:
 
 ## Creates a new subwindow that is a direct child of the current
 ## root window.
-func create_subwindow(win_name: String) -> Window:
-	var subwindow: Window = Window.new()
+func create_subwindow(win_name: String, hint: LWindowHandler.SubWindowHint) -> Window:
+	var subwindow: LWindowHandler = LWindowHandler.new(hint)
 	subwindow.name = win_name
 	subwindow.set_script(window_script)
 	add_child.call_deferred(subwindow)
@@ -165,7 +165,8 @@ func _ready() -> void:
 	contents.resized.connect(_on_contents_resized)
 
 	# Create subwindows and keep them hidden for now
-	option_subwindow = create_subwindow("options_subwindow")
+	option_subwindow = create_subwindow("options_subwindow", LWindowHandler.SubWindowHint.HINT_OPTION_MENU)
+
 
 
 func _process(delta: float) -> void:
