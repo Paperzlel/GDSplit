@@ -10,7 +10,9 @@ var _default_color: Color = Color.WHITE
 func set_timer_colour(colour: Color) -> void:
 	time_label.modulate = colour
 
-func _on_time_updated(time_ms: int, time_s: int) -> void:
+func _on_time_updated(time_ms: int) -> void:
+	var time_s: int = time_ms / 1000
+	time_ms %= 1000
 	time_label.text = str(time_s) + (".%02d" % (time_ms / 10))
 
 func _on_time_began() -> void:
@@ -27,7 +29,7 @@ func _on_time_finished() -> void:
 
 func _on_time_reset() -> void:
 	set_timer_colour(_default_color)
-	_on_time_updated(0, 0)
+	_on_time_updated(0)
 
 func save_config() -> Dictionary:
 	return { "color": _default_color }

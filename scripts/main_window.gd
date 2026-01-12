@@ -39,8 +39,24 @@ var has_splits: bool = false
 ## The number of splits loaded
 var split_counter: int = 0
 
-## The number of milliseconds elapsed overall. Reset every time
-## it ticks over 1000.
+## The number of ms since the timer was began. Wraps every 500
+## million years, which is unlikely to happen in most runs.
+var start_ms: int = 0
+
+## The time at which pause was hit in milliseconds. Resets on every
+## pause.
+var pause_start_ms: int = 0
+
+## The total amount of time the timer has been paused in milliseconds.
+## Doesn't reset until the run is over.
+var total_pause_ms: int = 0
+
+## The number of milliseconds the timer has been paused in this specific
+## series of being paused.
+var pause_ms: int = 0
+
+## The number of milliseconds that have elapsed in total. Will
+## also wrap the same amount, so calculating times based off
 var ms_elapsed: int = 0
 ## The number of seconds elapsed. Reset every time it ticks over
 ## 60.
@@ -84,6 +100,8 @@ func pause_event() -> void:
 func begin_splits() -> void:
 	Globals.timer_began.emit()
 	get_tree().call_group("real_timers", "_on_time_began")
+	# Grab MS here, since it'll change every time we reset.
+	start_ms = Time.get_ticks_msec()
 	time_state = TimerState.STATE_RUNNING
 
 
@@ -105,6 +123,8 @@ func increment_splits() -> void:
 func pause_splits() -> void:
 	Globals.timer_paused.emit()
 	get_tree().call_group("real_timers", "_on_time_paused")
+	# Get pause time here
+	pause_start_ms = Time.get_ticks_msec()
 	time_state = TimerState.STATE_PAUSED
 
 
@@ -114,6 +134,7 @@ func resume_splits() -> void:
 	Globals.timer_resumed.emit()
 	# Reuse event where applicable, does the same thing I think
 	get_tree().call_group("real_timers", "_on_time_began")
+	total_pause_ms += pause_ms
 	time_state = TimerState.STATE_RUNNING
 
 
@@ -125,6 +146,7 @@ func reset_splits() -> void:
 	time_state = TimerState.STATE_READY
 	s_elapsed = 0
 	ms_elapsed = 0
+	total_pause_ms = 0
 	split_counter = 0
 
 
@@ -169,16 +191,20 @@ func _ready() -> void:
 
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Run real-time pausable timers
+	var current_time_ms: int = Time.get_ticks_msec()
 	if time_state == TimerState.STATE_RUNNING:
-		## Update elapsed time
-		ms_elapsed += int(delta * 1000)
-		if ms_elapsed >= 1000:
-			s_elapsed += int(ms_elapsed / 1000)
-			ms_elapsed = ms_elapsed - 1000
+		# During running, the elapsed ms follows this formula:
+		ms_elapsed = current_time_ms - start_ms - total_pause_ms
+		# We calculate everything in milliseconds because it's a simple enough
+		# measurement with more than enough accuracy and plenty of time to run
+		# out (500 million years). Nodes that use the elapsed time are expected
+		# to calculate the time in H:M:S.MS themselves at the moment.
 
-		get_tree().call_group("real_timers", "_on_time_updated", ms_elapsed, s_elapsed)
+		get_tree().call_group("real_timers", "_on_time_updated", ms_elapsed)
+	elif time_state == TimerState.STATE_PAUSED:
+		pause_ms = current_time_ms - pause_start_ms
 
 
 func _on_window_input(event: InputEvent) -> void:
