@@ -28,9 +28,17 @@ text = "Open Split File"
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
+[node name="edit_layout" type="Button" parent="list"]
+layout_mode = 2
+text = "Edit Layout"
+
 [node name="open_layout_file" type="Button" parent="list"]
 layout_mode = 2
 text = "Open Layout File"
+
+[node name="separator2" type="Control" parent="list"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
 
 [node name="options" type="Button" parent="list"]
 layout_mode = 2

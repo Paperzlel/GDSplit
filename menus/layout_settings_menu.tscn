@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cqwi875lf84jv"]
+[gd_scene load_steps=2 format=3 uid="uid://cqwi875lf84jv"]
+
+[ext_resource type="Script" uid="uid://cl5nhw0u2m77u" path="res://scripts/menus/layout_settings_menu.gd" id="1_t8ft7"]
 
 [node name="layout_settings_menu" type="HBoxContainer"]
 custom_minimum_size = Vector2(400, 300)
@@ -7,6 +9,7 @@ offset_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
+script = ExtResource("1_t8ft7")
 
 [node name="left_context_menu" type="MarginContainer" parent="."]
 layout_mode = 2

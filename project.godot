@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="LinuxSplit"
+config/name="GDSplit"
+config/description="A speedrun timer for Linux and Windows, made in Godot"
 run/main_scene="uid://dsdg37o7r8hq"
 config/use_custom_user_dir=true
 config/features=PackedStringArray("4.5", "Forward Plus")

@@ -1,12 +1,19 @@
 class_name LRootWindow
 extends Window
 
+## Preloaded script that is attached to child windows for management purposes
 @onready var window_script: GDScript = preload("res://scripts/window_handler.gd")
+## The contents part of the main window, where all operations are passed through
 @onready var contents: LContentsPanel = $contents
 
+## Whether the focus of the window has been exited since program start
 var has_exited_focus: bool = false
+## The position of the cursor on-screen at the last movement
 var cursor_position: Vector2i
+## Reference to the options subwindow
 var option_subwindow: Window
+## Reference to the layout settings subwindow
+var layout_settings_subwindow: Window
 
 ## Splitting
 
@@ -167,6 +174,9 @@ func create_subwindow(win_name: String, hint: LWindowHandler.SubWindowHint) -> W
 	var subwindow: LWindowHandler = LWindowHandler.new(hint)
 	subwindow.name = win_name
 	subwindow.set_script(window_script)
+	# Connect subwindow request if it exists.
+	if subwindow.has_signal("open_subwindow_requested"):
+		subwindow.connect("open_subwindow_requested", _on_subwindow_open_requested)
 	add_child.call_deferred(subwindow)
 	return subwindow
 
@@ -188,6 +198,8 @@ func _ready() -> void:
 
 	# Create subwindows and keep them hidden for now
 	option_subwindow = create_subwindow("options_subwindow", LWindowHandler.SubWindowHint.HINT_OPTION_MENU)
+	layout_settings_subwindow = create_subwindow("layout_settings_subwindow", LWindowHandler.SubWindowHint.HINT_LAYOUT_MENU)
+	layout_settings_subwindow.borderless = false
 
 
 
@@ -243,3 +255,16 @@ func _on_window_focus_exited() -> void:
 ## Update our own size to equal that of the contents.
 func _on_contents_resized() -> void:
 	size = contents.size
+
+
+## Opens the subwindow specified by the name. `name` does not need to include the
+## `subwindow` suffix, as it's appended here.
+func _on_subwindow_open_requested(win_name: String) -> void:
+	win_name += "_subwindow"
+	match win_name:
+		layout_settings_subwindow.name:
+			show_subwindow(layout_settings_subwindow)
+		option_subwindow.name:
+			show_subwindow(option_subwindow)
+		_:
+			pass

@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://iyvbfaljmnia"]
+
+[ext_resource type="Script" uid="uid://kxjcifxtkb1t" path="res://scripts/subtypes/layout_settings_type.gd" id="1_qjrd5"]
+
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(300, 40)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+focus_mode = 1
+script = ExtResource("1_qjrd5")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.21696526, 0.15838906, 0.99997634, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Hello World!"
+vertical_alignment = 1

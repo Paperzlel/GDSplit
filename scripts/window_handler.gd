@@ -1,12 +1,16 @@
 class_name LWindowHandler
 extends Window
 
+signal open_subwindow_requested(name: String)
+
 ## The hint for what subwindow is being ran.
 enum SubWindowHint {
     ## This is an invalid subwindow
     HINT_NONE,
     ## This is the split editing subwindow
     HINT_SPLIT_MENU,
+    ## This is the layout editing subwindow
+    HINT_LAYOUT_MENU,
     ## This is the options menu subwindow
     HINT_OPTION_MENU,
 }
@@ -21,6 +25,7 @@ func _init(hint: SubWindowHint) -> void:
     visible = false
     initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
     window_hint = hint
+    close_requested.connect(_on_close_requested)
 
 
 func _ready() -> void:
@@ -28,7 +33,7 @@ func _ready() -> void:
     # The content manages itself instead of the window
     var scene_path: String = ""
     match window_hint:
-        SubWindowHint.HINT_SPLIT_MENU:
+        SubWindowHint.HINT_LAYOUT_MENU:
             scene_path = "res://menus/layout_settings_menu.tscn"
         SubWindowHint.HINT_OPTION_MENU:
             scene_path = "res://menus/option_menu.tscn"
@@ -39,3 +44,7 @@ func _ready() -> void:
     add_child(menu)
     if Vector2i(menu.size) != size:
         size = menu.size
+
+
+func _on_close_requested() -> void:
+    hide()
