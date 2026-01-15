@@ -14,6 +14,8 @@ var cursor_position: Vector2i
 var option_subwindow: Window
 ## Reference to the layout settings subwindow
 var layout_settings_subwindow: Window
+## Reference to the element list subwindow
+var element_list_window: LWindowHandler
 
 ## Splitting
 

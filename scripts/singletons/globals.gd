@@ -60,6 +60,20 @@ enum ColumnType
 	SEGMENT_DELTA_SEGMENT_TIME,
 }
 
+## The different type of elements we can have. Declaring these and using them
+## over class names is preferred for speed and simplicity in code.
+enum ElementType
+{
+	## Timer. Runs a simple clock that can be paused and restarted.
+	TYPE_TIMER,
+	## Splits. Has a number of displayed segments that are cycled through during
+	## a run.
+	TYPE_SPLITS,
+	## Maximum type, used for invalid elements.
+	TYPE_MAX
+}
+
+
 ## Global variables
 
 ## The version in a string format
@@ -67,8 +81,8 @@ var version_str: String = "0.1.0"
 ## The path used to load the config file.
 var config_path: String = "user://config.json"
 
-var _current_save_path: String = ""
-var _current_save_name: String = ""
+# var _current_save_path: String = ""
+# var _current_save_name: String = ""
 
 # Global config functions.
 
@@ -127,7 +141,7 @@ func _ready() -> void:
 
 		var default_timer: Dictionary = Dictionary()
 		default_timer["config"] = default_timer_config
-		default_timer["type"] = "LTimer"
+		default_timer["type"] = Globals.ElementType.TYPE_TIMER
 		
 		var default_contents: Array[Dictionary]
 		default_contents.append(default_timer)

@@ -18,12 +18,41 @@ var _layout_metadata: Dictionary
 var layout_contents: Array[Dictionary]:
 	get:
 		return _layout_metadata["contents"]
+	set(value):
+		_layout_metadata["contents"] = value
+
+func update_layout_contents(contents: Array[Dictionary]) -> void:
+	# Clear contents prior to writing
+	contents_node.clear_contents()
+	# Check dictionary for what to modify the contents to
+	for d: Dictionary in contents:
+		if d.get("type") == Globals.ElementType.TYPE_MAX:
+			printerr("Type field is null, skipping...")
+			continue
+		
+		var node: LType
+		match d["type"]:
+			Globals.ElementType.TYPE_TIMER:
+				node = (load("res://types/timer.tscn") as PackedScene).instantiate()
+			Globals.ElementType.TYPE_SPLITS:
+				node = (load("res://types/splits.tscn") as PackedScene).instantiate()
+			_:
+				node = null
 
 
-## Updates the layout to use the new contents instead of the old ones. Forces
-## the contents to be redrawn when doing so.
-func update_layout_contents(new_dict: Array[Dictionary]) -> void:
-	_layout_metadata["contents"] = new_dict
+		if node == null:
+			push_error("Could not instantiate class " + str(int(d["type"]) as Globals.ElementType) + 
+			" as it was not present in ClassDB.")
+			continue
+		
+		if !node.apply_config(d["config"]):
+			push_error("Failed to apply node config.")
+			node.free()
+			continue
+		
+		contents_node.add_child(node)
+	layout_contents = contents
+	print_verbose("Layout contents updated.")
 
 
 ## Parses the layout file dictionary into usable metadata.Files that break the
@@ -43,38 +72,14 @@ func parse_layout_file_metadata(file: Dictionary) -> bool:
 			to load layout.")
 		return false
 
-	for d: Dictionary in contents:
-		if d.get("type") == null:
-			printerr("Type field is null, skipping...")
-			continue
-		
-		var node: LType
-		match d["type"]:
-			"LTimer":
-				node = (load("res://types/timer.tscn") as PackedScene).instantiate()
-			"LSplits":
-				node = (load("res://types/splits.tscn") as PackedScene).instantiate()
-			_:
-				node = null
-	
-		if node == null:
-			push_error("Could not instantiate class " + str(d["type"]) + 
-			" as it was not present in ClassDB.")
-			continue
-		
-		if !node.apply_config(d["config"]):
-			push_error("Failed to apply node config.")
-			node.free()
-			continue
-		
-		contents_node.add_child(node)
+	update_layout_contents(contents)
 
 	# Parsing went well, we can use the layout metadata. Only assign if they're
 	# not equal to one another.
 	if _layout_metadata != file:
 		_layout_metadata = file
 
-	return false 
+	return true 
 
 
 func save_layout_metadata(cfg: Dictionary) -> void:

@@ -5,6 +5,11 @@ signal update_current_focus(obj: Control)
 
 @onready var _label: Label = $Label
 @onready var _rect: ColorRect = $ColorRect
+
+var type: Globals.ElementType = Globals.ElementType.TYPE_MAX
+
+var config: Dictionary
+
 var show_alpha: bool = false
 
 var type_name: String:
