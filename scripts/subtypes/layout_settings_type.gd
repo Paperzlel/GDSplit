@@ -12,27 +12,37 @@ var config: Dictionary
 
 var show_alpha: bool = false
 
+var tmp_type_proxy: String
+
 var type_name: String:
 	set(value):
-		_label.text = value
+		if is_inside_tree():
+			_label.text = value
+		else:
+			tmp_type_proxy = value
+
+
+## Called whenever the current focus of the list is updated. Clears selection
+## highlight if the in object is currently selected and is a layout type (as
+## other `Control`s like buttons and so forth can also be focused)
+func focus_updated(obj: Control) -> void:
+	if obj != self and (obj is LLayoutSettingsType):
+		show_alpha = false
+		_rect.color.a = 0
 
 
 func _ready() -> void:
-	# focus_entered.connect(_on_focus_entered)
-	# focus_exited.connect(_on_focus_exited)
-	update_current_focus.connect(_on_focus_updated)
 	_rect.color.a = 0
+	if !tmp_type_proxy.is_empty():
+		_label.text = tmp_type_proxy
 
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("window_select"):
 		show_alpha = !show_alpha
 		_rect.color.a = 255 if show_alpha else 0
+		update_current_focus.emit(self if show_alpha else null)
 	
-	if show_alpha:
-		update_current_focus.emit(self)
-	else:
-		update_current_focus.emit(null)
 
 func _on_focus_entered() -> void:
 	_rect.color.a = 255
@@ -42,9 +52,3 @@ func _on_focus_exited() -> void:
 	# Clear colour on exit and reset show_alpha so clicks work
 	# _rect.color.a = 0
 	show_alpha = false
-
-
-func _on_focus_updated(obj: Control) -> void:
-	if obj != self:
-		show_alpha = false
-		_rect.color.a = 0

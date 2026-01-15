@@ -58,6 +58,10 @@ func apply_config(cfg: Dictionary) -> bool:
 	return true
 
 
+func get_default_config() -> Dictionary:
+	return { "splits_visible": 5, "splits_until_end": 2 }
+
+
 func _ready() -> void:
 	Globals.split_incremented.connect(_on_splits_incremented)
 	## TODO: setup
@@ -67,4 +71,3 @@ func _ready() -> void:
 func _on_splits_incremented(_counter: int) -> void:
 	# TODO: setup
 	pass
-

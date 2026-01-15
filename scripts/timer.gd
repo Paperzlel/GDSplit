@@ -41,3 +41,7 @@ func apply_config(cfg: Dictionary) -> bool:
 	
 	_default_color = cfg["color"]
 	return true
+
+
+func get_default_config() -> Dictionary:
+	return { "color": Color.WHITE }

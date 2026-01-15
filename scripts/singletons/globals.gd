@@ -110,6 +110,29 @@ func check_and_update_if_needed(file: Dictionary) -> void:
 	update_version(file)
 
 
+# Utility functions for non-root windows
+func get_global_cursor_position() -> Vector2i:
+	return ($"/root" as LRootWindow).get_cursor_screen_position()
+
+
+func create_new_ltype(type: ElementType) -> LType:
+	var ret: LType
+	match type:
+		ElementType.TYPE_TIMER:
+			ret = (load("res://types/timer.tscn") as PackedScene).instantiate()
+		ElementType.TYPE_SPLITS:
+			ret = (load("res://types/splits.tscn") as PackedScene).instantiate()
+		_:
+			ret = null
+		
+	if ret == null:
+		push_error("Could not instantiate class of type " + str(ElementType.find_key(type)) + 
+		" as it was not present in ClassDB.")
+	return ret
+
+
+# Virtual/callable functions
+
 
 func _ready() -> void:
 	$"/root".set_script(main_window_script)
