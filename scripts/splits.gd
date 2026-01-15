@@ -58,6 +58,7 @@ func apply_config(cfg: Dictionary) -> bool:
 	return true
 
 
+## Implementation of the `LType` class function.
 func get_default_config() -> Dictionary:
 	return { "splits_visible": 5, "splits_until_end": 2 }
 

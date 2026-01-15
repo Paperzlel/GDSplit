@@ -13,14 +13,21 @@ extends Node
 ##  - split colours
 ##  - ...
 
+## Private dictionary containing our metadata for the layout. Contains theme
+## information as well as the contents themselves.
 var _layout_metadata: Dictionary
 
+## The layout contents, or every node present on-screen (or off-screen) in this
+## given layout. Overrides `_layout_metadata` internally.
 var layout_contents: Array[Dictionary]:
 	get:
 		return _layout_metadata["contents"]
 	set(value):
 		_layout_metadata["contents"] = value
 
+
+## Updates the contents within the current layout. Clears the contents, then redraws
+## it all bigger and better than ever before.
 func update_layout_contents(contents: Array[Dictionary]) -> void:
 	# Clear contents prior to writing
 	contents_node.clear_contents()
@@ -82,6 +89,8 @@ func parse_layout_file_metadata(file: Dictionary) -> bool:
 	return true 
 
 
+## Saves the layout metadata to the current file. Does not currently function
+## properly.
 func save_layout_metadata(cfg: Dictionary) -> void:
 	if !DirAccess.dir_exists_absolute(Globals._current_save_path):
 		OS.alert("The path to save the file at is invalid.", "Invalid Save Path")

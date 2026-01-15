@@ -31,9 +31,13 @@ func _on_time_reset() -> void:
 	set_timer_colour(_default_color)
 	_on_time_updated(0)
 
+
+## Implementation of the `LType` class function.
 func save_config() -> Dictionary:
 	return { "color": _default_color }
 
+
+## Implementation of the `LType` class function.
 func apply_config(cfg: Dictionary) -> bool:
 	if cfg.get("color") == null:
 		printerr("Failed to get color from dictionary.")
@@ -43,5 +47,6 @@ func apply_config(cfg: Dictionary) -> bool:
 	return true
 
 
+## Implementation of the `LType` class function.
 func get_default_config() -> Dictionary:
 	return { "color": Color.WHITE }

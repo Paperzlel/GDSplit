@@ -8,24 +8,9 @@ func clear_contents() -> void:
 		remove_child(c)
 
 
-## Saves the layout and sends the data over to the SplitMetadata singleton to
-## be properly parsed.
-func save_layout() -> void:
-	var dict: Dictionary
-	var arr: Array[Dictionary]
-	for n: Node in get_children():
-		if n is not LType:
-			printerr("Node is of invalid type, is class " + n.get_class())
-		else:
-			var t: LType = n
-			arr.append(t.save_config())
-	
-	dict["contents"] = arr
-	SplitMetadata.save_layout_metadata(dict)
-
-
 func _ready() -> void:
 	child_entered_tree.connect(_on_content_added)
+	child_exiting_tree.connect(_on_content_removed)
 	await get_tree().root.ready
 	resized.emit()
 
@@ -38,3 +23,22 @@ func _on_content_added(child : Node) -> void:
 		return
 	
 	position.y = 0
+
+
+## Called whenever content is removed from the tree. Can be called multiple
+## times per frame, so we may simply make this a method and call it when done
+## rather than resizing the window multiple times per frame. (TODO:)
+func _on_content_removed(child: Node) -> void:
+	if child is not Control:
+		push_error("Non-Control node added to contents.")
+		return
+	
+	position.y = 0
+	# manually set size because containers are losers like this
+	var n_size: int = 0
+	for n: Control in get_children():
+		n_size += int(n.size.y)
+		if n_size > 0:
+			n_size += 4
+	size.y = n_size
+	resized.emit()

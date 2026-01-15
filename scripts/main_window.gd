@@ -166,7 +166,7 @@ func reset_splits() -> void:
 ## appear at the user's cursor, although this is exclusive to
 ## the menu window for the moment.
 func show_subwindow(window: Window) -> void:
-	window.position = get_cursor_screen_position()
+	window.position = DisplayServer.mouse_get_position()
 	window.show()
 
 

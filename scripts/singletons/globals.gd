@@ -110,11 +110,8 @@ func check_and_update_if_needed(file: Dictionary) -> void:
 	update_version(file)
 
 
-# Utility functions for non-root windows
-func get_global_cursor_position() -> Vector2i:
-	return ($"/root" as LRootWindow).get_cursor_screen_position()
-
-
+## Creates a new `Object` of class `LType`, which is our main class for any
+## elements we display in the layout.
 func create_new_ltype(type: ElementType) -> LType:
 	var ret: LType
 	match type:
@@ -131,7 +128,7 @@ func create_new_ltype(type: ElementType) -> LType:
 	return ret
 
 
-# Virtual/callable functions
+# Virtual functions
 
 
 func _ready() -> void:

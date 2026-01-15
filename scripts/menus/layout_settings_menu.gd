@@ -125,11 +125,20 @@ func _on_move_down_pressed() -> void:
 
 
 func _on_remove_element_pressed() -> void:
-	pass
+	# Do nothing if null
+	if current_focus == null:
+		return
+	# obtain current focus and update cache/children
+	var idx: int = layout_list.get_children().find(current_focus)
+	layout_list.remove_child(current_focus)
+	cached_contents.remove_at(idx)
+	# Clean up unreferences items
+	current_focus.queue_free()
+	LayoutMetadata.update_layout_contents(cached_contents)
 
 
 func _on_add_element_pressed() -> void:
-	element_list_popup.position = Globals.get_global_cursor_position()
+	element_list_popup.position = DisplayServer.mouse_get_position()
 	element_list_popup.popup()
 
 

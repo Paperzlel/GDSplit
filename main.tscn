@@ -5,4 +5,5 @@
 [node name="contents" type="VBoxContainer"]
 offset_right = 300.0
 offset_bottom = 42.0
+size_flags_vertical = 3
 script = ExtResource("1_0xm2m")

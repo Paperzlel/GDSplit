@@ -42,13 +42,3 @@ func _gui_input(event: InputEvent) -> void:
 		show_alpha = !show_alpha
 		_rect.color.a = 255 if show_alpha else 0
 		update_current_focus.emit(self if show_alpha else null)
-	
-
-func _on_focus_entered() -> void:
-	_rect.color.a = 255
-
-
-func _on_focus_exited() -> void:
-	# Clear colour on exit and reset show_alpha so clicks work
-	# _rect.color.a = 0
-	show_alpha = false
