@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4hm2ewiyi7uq"]
+
+[ext_resource type="Script" uid="uid://epol1te0ojcc" path="res://scripts/menus/submenus/option_item_color.gd" id="1_yexd3"]
+
+[node name="option_item_color" type="HSplitContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+split_offset = 300
+dragging_enabled = false
+script = ExtResource("1_yexd3")
+color = Color(1, 1, 1, 1)
+
+[node name="name" type="Label" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="MarginContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+color = Color(1, 1, 1, 1)

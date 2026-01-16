@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddlm8hmrny1du"]
+
+[ext_resource type="PackedScene" uid="uid://c4hm2ewiyi7uq" path="res://option_items/option_item_color.tscn" id="1_4v33v"]
+[ext_resource type="Script" uid="uid://5u6m4aqr4xcb" path="res://scripts/menus/submenus/menu_timer_settings.gd" id="1_bn101"]
+
+[node name="menu_timer_settings" type="VBoxContainer"]
+offset_right = 400.0
+offset_bottom = 300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_bn101")
+
+[node name="default_color_setting" parent="." instance=ExtResource("1_4v33v")]
+layout_mode = 2
+option_name = "Default Color"
+
+[node name="playing_color_setting" parent="." instance=ExtResource("1_4v33v")]
+layout_mode = 2
+option_name = "Playing Color"
+
+[node name="paused_color_setting" parent="." instance=ExtResource("1_4v33v")]
+layout_mode = 2
+option_name = "Paused Color"
+
+[node name="finished_color_setting" parent="." instance=ExtResource("1_4v33v")]
+layout_mode = 2
+option_name = "Finished Color"

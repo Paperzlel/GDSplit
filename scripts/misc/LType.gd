@@ -12,5 +12,6 @@ func save_config() -> Dictionary
 @abstract
 func apply_config(cfg: Dictionary) -> bool
 
-@abstract
-func get_default_config() -> Dictionary
+
+static func get_default_config() -> Dictionary:
+    return {}

@@ -6,6 +6,7 @@ extends VBoxContainer
 func clear_contents() -> void:
 	for c: Node in get_children():
 		remove_child(c)
+		c.queue_free()
 
 
 func _ready() -> void:
@@ -37,8 +38,13 @@ func _on_content_removed(child: Node) -> void:
 	# manually set size because containers are losers like this
 	var n_size: int = 0
 	for n: Control in get_children():
+		# Ignore size if it's the node we're removing.
+		if n == child:
+			continue
 		n_size += int(n.size.y)
 		if n_size > 0:
 			n_size += 4
+	# Wait for the tree to be exited properly
+	await child.tree_exited
 	size.y = n_size
 	resized.emit()

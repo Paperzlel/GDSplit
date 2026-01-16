@@ -128,7 +128,7 @@ func create_new_ltype(type: ElementType) -> LType:
 	return ret
 
 
-# Virtual functions
+#region Virtual functions
 
 
 func _ready() -> void:
@@ -153,25 +153,9 @@ func _ready() -> void:
 	fa.close()
 	check_and_update_if_needed(dict)
 	
-	## No previous layouts have been used, send the default theme
-	## over
+	## No previous layouts have been used, load the default.
 	if String(dict["last_file"]).is_empty():
-		var default_timer_config: Dictionary = Dictionary()
-		default_timer_config["color"] = Color.WHITE
-
-		var default_timer: Dictionary = Dictionary()
-		default_timer["config"] = default_timer_config
-		default_timer["type"] = Globals.ElementType.TYPE_TIMER
-		
-		var default_contents: Array[Dictionary]
-		default_contents.append(default_timer)
-
-		var default_layout: Dictionary = Dictionary()
-		default_layout["version"] = version_str
-		default_layout["contents"] = default_contents
-		
-		# Created default entry, send it to the layout metadata to be parsed.
-		LayoutMetadata.parse_layout_file_metadata(default_layout)
+		LayoutMetadata.load_default_layout()
 	
 	if String(dict["last_layout"]).is_empty():
 		return
@@ -191,3 +175,5 @@ func _ready() -> void:
 		var layout_dict: Dictionary = JSON.parse_string(fa.get_as_text())
 		if !LayoutMetadata.parse_layout_file_metadata(layout_dict):
 			OS.alert("Invalid metadata in file " + dict["last_layout"] + ", unable to continue.", "Layout Parse Error")
+
+#endregion

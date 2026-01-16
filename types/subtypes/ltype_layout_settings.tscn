@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://iyvbfaljmnia"]
 
-[ext_resource type="Script" uid="uid://kxjcifxtkb1t" path="res://scripts/subtypes/layout_settings_type.gd" id="1_qjrd5"]
+[ext_resource type="Script" uid="uid://kxjcifxtkb1t" path="res://scripts/subtypes/ltype_layout_settings.gd" id="1_0kodl"]
 
 [node name="Control" type="Control"]
 custom_minimum_size = Vector2(300, 40)
@@ -10,7 +10,7 @@ offset_right = 300.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
 focus_mode = 1
-script = ExtResource("1_qjrd5")
+script = ExtResource("1_0kodl")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
