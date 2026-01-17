@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c4hm2ewiyi7uq"]
 
-[ext_resource type="Script" uid="uid://epol1te0ojcc" path="res://scripts/menus/submenus/option_item_color.gd" id="1_yexd3"]
+[ext_resource type="Script" uid="uid://epol1te0ojcc" path="res://scripts/option_items/option_item_color.gd" id="1_yexd3"]
 
 [node name="option_item_color" type="HSplitContainer"]
 offset_right = 40.0

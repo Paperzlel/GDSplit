@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b3anvab6v5mqh"]
 
-[ext_resource type="Script" uid="uid://bou75bo1fr6nf" path="res://scripts/menus/submenus/option_item_check.gd" id="1_y67ok"]
+[ext_resource type="Script" uid="uid://bou75bo1fr6nf" path="res://scripts/option_items/option_item_check.gd" id="1_y67ok"]
 
 [node name="option_item_check" type="HSplitContainer"]
 offset_right = 40.0

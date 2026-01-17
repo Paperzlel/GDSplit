@@ -12,6 +12,8 @@ extends HBoxContainer
 
 ## The settings menu for timers, as a loadable resource.
 @onready var menu_timer_res: PackedScene = preload("res://menus/submenus/menu_timer_settings.tscn")
+## The settings menu for splits, as a loadable resource.
+@onready var menu_split_res: PackedScene = preload("res://menus/submenus/menu_split_settings.tscn")
 
 ## The "Add Element" button.
 @onready var add_element_button: Button = $left_context_menu/option_list/add_element
@@ -224,7 +226,7 @@ func _on_layout_setting_config_changed(obj: LTypeLayoutSettings) -> void:
 	var lt: LType = LayoutMetadata.get_ltype_from_index(idx)
 
 	if !lt.apply_config(obj.config):
-		push_error("Could not apply config for node " + lt.name + " (type was from " + obj.type_name + ")")
+		push_error("Could not apply config for node " + lt.name + " (type \"" + Globals.element_type_to_string(obj.type) + "\")")
 
 
 #endregion
@@ -260,6 +262,8 @@ func new_lmenu_settings(type: LTypeLayoutSettings) -> LMenuSettings:
 	match type.type:
 		Globals.ElementType.TYPE_TIMER:
 			ret = menu_timer_res.instantiate() as LMenuSettings
+		Globals.ElementType.TYPE_SPLITS:
+			ret = menu_split_res.instantiate() as LMenuSettings
 		_:
 			push_error("LTypeLayoutSettings had an invalid or unregistered type!")
 			return null

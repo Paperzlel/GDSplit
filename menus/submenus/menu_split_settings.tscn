@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7jsdjw3sttw8"]
+
+[ext_resource type="PackedScene" uid="uid://bluax0rdxgxte" path="res://option_items/option_item_number.tscn" id="1_nomus"]
+[ext_resource type="Script" uid="uid://by1m4g6i7m4lr" path="res://scripts/menus/submenus/menu_split_settings.gd" id="1_stmel"]
+
+[node name="menu_split_settings" type="VBoxContainer"]
+offset_right = 400.0
+offset_bottom = 300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_stmel")
+
+[node name="option_item_number" parent="." instance=ExtResource("1_nomus")]
+layout_mode = 2
+option_name = "Splits Visible"
+
+[node name="option_item_number2" parent="." instance=ExtResource("1_nomus")]
+layout_mode = 2
+option_name = "Splits Until End"

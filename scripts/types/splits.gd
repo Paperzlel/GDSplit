@@ -38,22 +38,22 @@ func add_split(split_name: String, icon: ImageTexture) -> void:
 
 ## Implementation of the `LType` class function.
 func save_config() -> Dictionary:
-	return { "splits_visible": splits_visible, "splits_until_move": splits_until_move }
+	return { "splits_visible": splits_visible, "splits_until_end": splits_until_move }
 
 
 ## Implementation of the `LType` class function.
 func apply_config(cfg: Dictionary) -> bool:
-	if !cfg.get("splits_visible"):
+	if cfg.get("splits_visible") == null:
 		push_error("Failed to get the visible split count from 
 			the dictionary")
 		return false
 	splits_visible = cfg["splits_visible"]
 
-	if !cfg.get("splits_until_end"):
+	if cfg.get("splits_until_end") == null:
 		push_error("Failed to get the number of splits until end
 			from the dictionary")
 		return false
-	splits_until_move = cfg["splits_until_move"]
+	splits_until_move = cfg["splits_until_end"]
 	
 	return true
 

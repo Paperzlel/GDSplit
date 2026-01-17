@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://bluax0rdxgxte"]
+
+[ext_resource type="Script" uid="uid://dsb2ako6ge6eg" path="res://scripts/option_items/option_item_number.gd" id="1_jeu8p"]
+
+[node name="option_item_number" type="HSplitContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+split_offset = 300
+dragging_enabled = false
+script = ExtResource("1_jeu8p")
+
+[node name="name" type="Label" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer"]
+layout_mode = 2
+rounded = true
+alignment = 2
