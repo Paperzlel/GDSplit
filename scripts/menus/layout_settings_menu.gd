@@ -191,10 +191,13 @@ func _on_new_layout_element_selected(idx: int) -> void:
 	# focus or at the end if none is selected)
 	var lidx: int = get_layout_idx(current_focus) if current_focus != null else -1
 	var node: LTypeLayoutSettings = new_ltype_layout_settings(type_enum, d["config"])
-	layout_list.add_child(node)
-	if lidx != -1 and lidx < cached_contents.size():
-		layout_list.move_child(node, lidx + 1)
-	LayoutMetadata.add_config_data_at(lidx, d)
+	if node != null:
+		layout_list.add_child(node)
+		if lidx != -1 and lidx < cached_contents.size():
+			layout_list.move_child(node, lidx + 1)
+		LayoutMetadata.add_config_data_at(lidx, d)
+	else:
+		push_error("Layout settings node was null. Unable to add to tree.")
 
 
 ## Called whenever an object in the layout list was focused in. Updates the
@@ -240,9 +243,13 @@ func new_ltype_layout_settings(type: Globals.ElementType, config: Dictionary) ->
 	ret.config_changed.connect(_on_layout_setting_config_changed)
 	# Attach sibling settings menu once set up
 	var menu_settings: LMenuSettings = new_lmenu_settings(ret)
-	settings_list.add_child(menu_settings)
-	settings_list.set_tab_title(settings_list.get_children().find(menu_settings), 
-			Globals.element_type_to_string(menu_settings.ltype_ref.type))
+	if menu_settings != null:
+		settings_list.add_child(menu_settings)
+		settings_list.set_tab_title(settings_list.get_children().find(menu_settings), 
+				Globals.element_type_to_string(menu_settings.ltype_ref.type))
+	else:
+		push_error("Unable to create LMenuSettings.")
+		return null
 	return ret
 
 

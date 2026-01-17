@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dntcwlewxq6uw"]
 
-[ext_resource type="Script" uid="uid://dwghd8ox67ee7" path="res://scripts/timer.gd" id="1_aobjb"]
+[ext_resource type="Script" uid="uid://dwghd8ox67ee7" path="res://scripts/types/timer.gd" id="1_aobjb"]
 
 [node name="timer" type="Control" groups=["real_timers"]]
 custom_minimum_size = Vector2(0, 64)
