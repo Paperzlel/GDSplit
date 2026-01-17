@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c7jsdjw3sttw8"]
 
-[ext_resource type="PackedScene" uid="uid://bluax0rdxgxte" path="res://option_items/option_item_number.tscn" id="1_nomus"]
+[ext_resource type="PackedScene" uid="uid://bluax0rdxgxte" path="res://scenes/option_items/option_item_number.tscn" id="1_nomus"]
 [ext_resource type="Script" uid="uid://by1m4g6i7m4lr" path="res://scripts/menus/submenus/menu_split_settings.gd" id="1_stmel"]
 
 [node name="menu_split_settings" type="VBoxContainer"]

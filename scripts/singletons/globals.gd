@@ -120,9 +120,9 @@ func create_new_ltype(type: ElementType) -> LType:
 	var ret: LType
 	match type:
 		ElementType.TYPE_TIMER:
-			ret = (load("res://types/timer.tscn") as PackedScene).instantiate()
+			ret = (load("res://scenes/types/timer.tscn") as PackedScene).instantiate()
 		ElementType.TYPE_SPLITS:
-			ret = (load("res://types/splits.tscn") as PackedScene).instantiate()
+			ret = (load("res://scenes/types/splits.tscn") as PackedScene).instantiate()
 		_:
 			ret = null
 		

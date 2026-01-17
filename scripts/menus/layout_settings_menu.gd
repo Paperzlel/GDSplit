@@ -8,12 +8,12 @@ extends HBoxContainer
 
 ## The resource corresponding to the layout setting "type" scene that is displayed
 ## whenever an element is added or removed
-@onready var layout_type_res: PackedScene = preload("res://types/subtypes/ltype_layout_settings.tscn")
+@onready var layout_type_res: PackedScene = preload("res://scenes/types/subtypes/ltype_layout_settings.tscn")
 
 ## The settings menu for timers, as a loadable resource.
-@onready var menu_timer_res: PackedScene = preload("res://menus/submenus/menu_timer_settings.tscn")
+@onready var menu_timer_res: PackedScene = preload("res://scenes/menus/submenus/menu_timer_settings.tscn")
 ## The settings menu for splits, as a loadable resource.
-@onready var menu_split_res: PackedScene = preload("res://menus/submenus/menu_split_settings.tscn")
+@onready var menu_split_res: PackedScene = preload("res://scenes/menus/submenus/menu_split_settings.tscn")
 
 ## The "Add Element" button.
 @onready var add_element_button: Button = $left_context_menu/option_list/add_element

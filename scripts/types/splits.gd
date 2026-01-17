@@ -17,9 +17,9 @@ extends LType
 @onready var right_column: HBoxContainer =$right
 
 ## The resource for a right hand side column.
-@onready var right_column_res: PackedScene = preload("res://types/subtypes/split_column.tscn")
+@onready var right_column_res: PackedScene = preload("res://scenes/types/subtypes/split_column.tscn")
 ## The resource for a left hand column split row.
-@onready var split_row_res: PackedScene = preload("res://types/subtypes/split_left_row.tscn")
+@onready var split_row_res: PackedScene = preload("res://scenes/types/subtypes/split_left_row.tscn")
 
 ## Whether icons should be shown or not.
 var icons_visible: bool = false

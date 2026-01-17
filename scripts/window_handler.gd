@@ -34,9 +34,9 @@ func _ready() -> void:
 	var scene_path: String = ""
 	match window_hint:
 		SubWindowHint.HINT_LAYOUT_MENU:
-			scene_path = "res://menus/layout_settings_menu.tscn"
+			scene_path = "res://scenes/menus/layout_settings_menu.tscn"
 		SubWindowHint.HINT_OPTION_MENU:
-			scene_path = "res://menus/option_menu.tscn"
+			scene_path = "res://scenes/menus/option_menu.tscn"
 		_:
 			pass
 	

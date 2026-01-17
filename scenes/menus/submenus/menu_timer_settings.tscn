@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ddlm8hmrny1du"]
 
-[ext_resource type="PackedScene" uid="uid://c4hm2ewiyi7uq" path="res://option_items/option_item_color.tscn" id="1_4v33v"]
+[ext_resource type="PackedScene" uid="uid://c4hm2ewiyi7uq" path="res://scenes/option_items/option_item_color.tscn" id="1_4v33v"]
 [ext_resource type="Script" uid="uid://5u6m4aqr4xcb" path="res://scripts/menus/submenus/menu_timer_settings.gd" id="1_bn101"]
 
 [node name="menu_timer_settings" type="VBoxContainer"]

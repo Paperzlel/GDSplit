@@ -152,9 +152,9 @@ func add_new_node_from_item_dictionary(dict: Dictionary) -> void:
 	var node: LType
 	match dict["type"]:
 		Globals.ElementType.TYPE_TIMER:
-			node = (load("res://types/timer.tscn") as PackedScene).instantiate()
+			node = (load("res://scenes/types/timer.tscn") as PackedScene).instantiate()
 		Globals.ElementType.TYPE_SPLITS:
-			node = (load("res://types/splits.tscn") as PackedScene).instantiate()
+			node = (load("res://scenes/types/splits.tscn") as PackedScene).instantiate()
 		_:
 			node = null
 
