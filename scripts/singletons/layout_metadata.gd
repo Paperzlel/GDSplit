@@ -146,7 +146,7 @@ func get_ltype_from_index(idx: int) -> LType:
 ## as defined in `dict`. This does not move the data in any way.
 func add_new_node_from_item_dictionary(dict: Dictionary) -> void:
 	if dict.get("type") >= Globals.ElementType.TYPE_MAX:
-		printerr("Type field is invalid, skipping adding this node.")
+		push_error("Type field is invalid, skipping adding node.")
 		return
 
 	var node: LType

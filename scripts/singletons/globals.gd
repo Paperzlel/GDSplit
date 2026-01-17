@@ -84,7 +84,7 @@ var config_path: String = "user://config.json"
 # var _current_save_path: String = ""
 # var _current_save_name: String = ""
 
-# Global config functions.
+#region Version checking
 
 
 ## Check to see if the LinuxSplit API version is out of date. 
@@ -110,6 +110,10 @@ func check_and_update_if_needed(file: Dictionary) -> void:
 	update_version(file)
 
 
+#endregion
+#region Helper functions
+
+
 ## Creates a new `Object` of class `LType`, which is our main class for any
 ## elements we display in the layout.
 func create_new_ltype(type: ElementType) -> LType:
@@ -128,6 +132,22 @@ func create_new_ltype(type: ElementType) -> LType:
 	return ret
 
 
+## Converts a value from the `ElementType` enum to a String.
+func element_type_to_string(type: ElementType) -> String:
+	var ret: String = ElementType.keys()[type] as String
+	ret = ret.to_lower().right(-5)
+	ret[0] = ret[0].to_upper()
+	return ret
+
+
+## Converts a string into the `ElementType`. Used only for conversion reasons
+## and is NOT as intelligent as it sounds.
+func string_to_element_type(input_str: String) -> ElementType:
+	input_str = "TYPE_" + input_str.to_upper()
+	return ElementType.get(input_str)
+
+
+#endregion
 #region Virtual functions
 
 

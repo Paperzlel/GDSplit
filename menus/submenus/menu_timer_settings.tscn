@@ -10,9 +10,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_bn101")
 
-[node name="default_color_setting" parent="." instance=ExtResource("1_4v33v")]
+[node name="idle_color_setting" parent="." instance=ExtResource("1_4v33v")]
 layout_mode = 2
-option_name = "Default Color"
+option_name = "Idle Color"
 
 [node name="playing_color_setting" parent="." instance=ExtResource("1_4v33v")]
 layout_mode = 2

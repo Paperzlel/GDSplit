@@ -28,13 +28,16 @@ func set_item_value(value: Variant) -> void:
 
 func update_values() -> void:
     color = _internal_color
-    value_updated.emit(color)
+    value_updated.emit(setting, color)
     super.update_values()
 
 
 func _ready() -> void:
+    update_values()
     _color_picker.color_changed.connect(_on_color_changed)
+    super._ready()
 
 
 func _on_color_changed(in_color: Color) -> void:
     color = in_color
+    update_values()

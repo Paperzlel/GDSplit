@@ -86,6 +86,6 @@ theme_override_constants/margin_bottom = 6
 [node name="menu_list" type="VBoxContainer" parent="right_bg/bg_margin/inner_menu/menu_margin"]
 layout_mode = 2
 
-[node name="TabContainer" type="TabContainer" parent="right_bg/bg_margin/inner_menu/menu_margin"]
+[node name="settings_list" type="TabContainer" parent="right_bg/bg_margin/inner_menu/menu_margin"]
 visible = false
 layout_mode = 2

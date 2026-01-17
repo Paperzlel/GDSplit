@@ -6,6 +6,8 @@ extends HSplitContainer
 
 signal value_updated(setting: String, item: Variant)
 
+## The internal setting the child refers to. Calculated at runtime.
+var setting: String = ""
 
 var _internal_name: String = ""
 @onready var _label: Label = $"name"
@@ -34,7 +36,8 @@ func update_values() -> void:
 
 
 func _ready() -> void:
-    update_values()
+    # Convert name to setting
+    setting = _internal_name.to_lower().replace(" ", "_")
     if !Engine.is_editor_hint():
         _label.text = _internal_name
         if typeof(get_item_value()) == TYPE_NIL:

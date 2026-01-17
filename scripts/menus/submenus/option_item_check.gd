@@ -28,14 +28,16 @@ func set_item_value(value: Variant) -> void:
 
 func update_values() -> void:
     checked = _internal_checked
-    value_updated.emit(checked)
+    value_updated.emit(setting, checked)
     super.update_values()
 
 
 func _ready() -> void:
     update_values()
     _box.toggled.connect(_on_check_button_toggled)
+    super._ready()
 
 
 func _on_check_button_toggled(value: bool) -> void:
     checked = value
+    update_values()

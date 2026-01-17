@@ -26,7 +26,8 @@ var _paused_color: Color = Color.DARK_GRAY
 var _finished_color: Color = Color.SKY_BLUE
 
 func set_timer_colour(colour: Color) -> void:
-	time_label.modulate = colour
+	if time_label != null:
+		time_label.self_modulate = colour
 
 
 func _on_time_updated(time_ms: int) -> void:
@@ -75,6 +76,8 @@ func apply_config(cfg: Dictionary) -> bool:
 	_playing_color = cfg["playing_color"]
 	_paused_color = cfg["paused_color"]
 	_finished_color = cfg["finished_color"]
+	# Assumes on-the-fly changes aren't being made. Fix if it becomes an issue.
+	set_timer_colour(_idle_color)
 	return true
 
 
