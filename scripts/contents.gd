@@ -2,13 +2,6 @@ class_name LContentsPanel
 extends VBoxContainer
 
 
-## Clears all children from the list.
-func clear_contents() -> void:
-	for c: Node in get_children():
-		remove_child(c)
-		c.queue_free()
-
-
 func _ready() -> void:
 	child_entered_tree.connect(_on_content_added)
 	child_exiting_tree.connect(_on_content_removed)

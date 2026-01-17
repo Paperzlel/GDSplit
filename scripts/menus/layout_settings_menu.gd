@@ -106,7 +106,7 @@ func _ready() -> void:
 	remove_element_button.pressed.connect(_on_remove_element_pressed)
 	add_element_button.pressed.connect(_on_add_element_pressed)
 	layout_settings_button.pressed.connect(_on_layout_settings_toggle_pressed)
-	# TODO: Clear layout
+	clear_layout_button.pressed.connect(_on_clear_layout_pressed)
 
 
 #endregion
@@ -145,6 +145,40 @@ func _on_add_element_pressed() -> void:
 	element_list_popup.popup()
 
 
+## Toggles between the general layout placement settings and the node-specific
+## ones when pressed. Disables the other element buttons to avoid confusion.
+func _on_layout_settings_toggle_pressed() -> void:
+	layout_list.visible = !layout_list.visible
+	settings_list.visible = !settings_list.visible
+
+	layout_settings_button.text = "Layout List" if settings_list.visible else "Layout Settings"
+
+	# Change availability if the settings list is open
+	move_up_button.disabled = settings_list.visible
+	move_down_button.disabled = settings_list.visible
+	add_element_button.disabled = settings_list.visible
+	remove_element_button.disabled = settings_list.visible
+	clear_layout_button.disabled = settings_list.visible
+
+
+## Called when the "Clear Layout" button is pressed. Clears all data from the list
+## starting from the end to the beginning. Does not load a default config.
+func _on_clear_layout_pressed() -> void:
+	var s: int = layout_list.get_children().size() - 1
+	while s >= 0:
+		# Remove layout node
+		var layout_node: LTypeLayoutSettings = layout_list.get_child(s)
+		layout_list.remove_child(layout_node)
+		layout_node.queue_free()
+		var setting_node: LMenuSettings = settings_list.get_child(s)
+		settings_list.remove_child(setting_node)
+		setting_node.queue_free()
+		LayoutMetadata.remove_config_data_at(s)
+		s -= 1
+
+
+## Called whenever the new layout element was selected from the tree. Adds the
+## new element in and initializes its default data.
 func _on_new_layout_element_selected(idx: int) -> void:
 	var type_enum: Globals.ElementType = Globals.string_to_element_type(element_list_popup.get_item_text(idx))
 	# Create a new temporary node for the type
@@ -163,6 +197,8 @@ func _on_new_layout_element_selected(idx: int) -> void:
 	LayoutMetadata.add_config_data_at(lidx, d)
 
 
+## Called whenever an object in the layout list was focused in. Updates the
+## focus so that the proper node is highlighted.
 func _on_current_object_list_focused(obj: Control) -> void:
 	current_focus = obj
 	for n: LTypeLayoutSettings in layout_list.get_children():
@@ -188,22 +224,6 @@ func _on_layout_setting_config_changed(obj: LTypeLayoutSettings) -> void:
 		push_error("Could not apply config for node " + lt.name + " (type was from " + obj.type_name + ")")
 
 
-## Toggles between the general layout placement settings and the node-specific
-## ones when pressed. Disables the other element buttons to avoid confusion.
-func _on_layout_settings_toggle_pressed() -> void:
-	layout_list.visible = !layout_list.visible
-	settings_list.visible = !settings_list.visible
-
-	layout_settings_button.text = "Layout List" if settings_list.visible else "Layout Settings"
-
-	# Change availability if the settings list is open
-	move_up_button.disabled = settings_list.visible
-	move_down_button.disabled = settings_list.visible
-	add_element_button.disabled = settings_list.visible
-	remove_element_button.disabled = settings_list.visible
-	clear_layout_button.disabled = settings_list.visible
-
-
 #endregion
 #region Utility functions
 
@@ -226,6 +246,8 @@ func new_ltype_layout_settings(type: Globals.ElementType, config: Dictionary) ->
 	return ret
 
 
+## Creates a new class of type `LMenuSettings` and initializes its defaults as
+## expected.
 func new_lmenu_settings(type: LTypeLayoutSettings) -> LMenuSettings:
 	var ret: LMenuSettings = null
 	match type.type:

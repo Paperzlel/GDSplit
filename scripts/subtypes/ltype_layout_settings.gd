@@ -4,20 +4,31 @@
 class_name LTypeLayoutSettings
 extends Control
 
+## Update what node is currently "focused" i.e. which is highlighted.
 signal update_current_focus(obj: Control)
+## Notifies that the config for the node has changed and needs to be
+## updated elsewhere.
 signal config_changed(obj: LTypeLayoutSettings)
 
+## Reference to the label that the node is rendered upon
 @onready var _label: Label = $Label
+## Reference to the "ColorRect" that shows what node is highlighted.
 @onready var _rect: ColorRect = $ColorRect
 
+## The type of the node. Used to find the corresponding type in the tree.
 var type: Globals.ElementType = Globals.ElementType.TYPE_MAX
-
+## The config dictionary used for the given node. References the data up
+## in the `LayoutMetadata`, so re-writing the two isn't needed.
 var config: Dictionary
-
+## Whether to show the alpha channel, or in other words, whether to show the
+## background of the element or not.
 var show_alpha: bool = false
-
+## The temporary type name that is set prior to `_ready()` whilst the element
+## is still being set up.
 var tmp_type_proxy: String
 
+## The name of the type being used. Converted from the `ElementType` when
+## created.
 var type_name: String:
 	set(value):
 		if is_inside_tree():
@@ -26,6 +37,8 @@ var type_name: String:
 			tmp_type_proxy = value
 
 
+## Writes data to the config and notifies that it's changed. Intented so that
+## corresponding `LTypes` can update their own values.
 func write_to_config(key: String, value: Variant) -> void:
 	config[key] = value
 	config_changed.emit(self)

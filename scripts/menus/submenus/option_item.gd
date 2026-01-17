@@ -6,10 +6,13 @@ extends HSplitContainer
 
 signal value_updated(setting: String, item: Variant)
 
-## The internal setting the child refers to. Calculated at runtime.
+## The internal setting the child refers to. Calculated on launch.
 var setting: String = ""
 
+## Internal name of the setting, in human form. Don't set directly.
 var _internal_name: String = ""
+
+## Reference to the "name" label that displays the text.
 @onready var _label: Label = $"name"
 
 @export var option_name: String:

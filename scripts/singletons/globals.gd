@@ -154,8 +154,7 @@ func string_to_element_type(input_str: String) -> ElementType:
 func _ready() -> void:
 	$"/root".set_script(main_window_script)
 
-	## Create the default config file if this is the
-	## first time booting the app.
+	# Create the default config file if this is the first time booting the app.
 	if !FileAccess.file_exists(config_path):
 		var n_file: FileAccess = FileAccess.open(config_path, FileAccess.WRITE)
 		
@@ -168,18 +167,21 @@ func _ready() -> void:
 		n_file.close()
 		return
 	
+	# Read the config from the path if it does in fact exist.
 	var fa: FileAccess = FileAccess.open(config_path, FileAccess.READ)
 	var dict: Dictionary = JSON.parse_string(fa.get_as_text())
 	fa.close()
 	check_and_update_if_needed(dict)
 	
-	## No previous layouts have been used, load the default.
+	# No previous layouts have been used, load the default.
 	if String(dict["last_file"]).is_empty():
 		LayoutMetadata.load_default_layout()
 	
+	# No previous splits have been used, 
 	if String(dict["last_layout"]).is_empty():
 		return
 
+	# Split file used previously no longer exists, warn.
 	if !FileAccess.file_exists(dict["last_file"]):
 		OS.alert("File \"" + dict["last_file"] + "\" no longer exists.")
 	else:
@@ -188,12 +190,13 @@ func _ready() -> void:
 		if !SplitMetadata.parse_split_file_metadata(data_dict):
 			OS.alert("Invalid metadata in file " + dict["last_file"] + ", unable to continue.", "Split Parse Error")
 
+	# Layout file used previously no longer exists, warn.
 	if !FileAccess.file_exists(dict["last_layout"]):
 		OS.alert("File \"" + dict["last_file"] + "\" no longer exists.")
 	else:
 		fa = FileAccess.open(config_path, FileAccess.READ)
 		var layout_dict: Dictionary = JSON.parse_string(fa.get_as_text())
-		if !LayoutMetadata.parse_layout_file_metadata(layout_dict):
+		if !LayoutMetadata.load_layout_from_dictionary(layout_dict):
 			OS.alert("Invalid metadata in file " + dict["last_layout"] + ", unable to continue.", "Layout Parse Error")
 
 #endregion

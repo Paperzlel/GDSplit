@@ -27,11 +27,13 @@ var access_mode: AccessMode = AccessMode.FILE_INVALID
 
 
 func _ready() -> void:
+	# Set buttons.
 	$"list/exit".pressed.connect(_on_exit_pressed)
 	$"list/open_split_file".pressed.connect(_on_open_split_file_pressed)
 	$"list/open_layout_file".pressed.connect(_on_open_layout_file_pressed)
 	$"list/edit_layout".pressed.connect(_on_open_edit_layout_selected)
 
+	# Create FileDialog and enabled filtering
 	fd = FileDialog.new()
 	fd.name = "linuxsplit_fd"
 	fd.add_filter("*.json")

@@ -11,6 +11,9 @@ func _ready() -> void:
 		push_error("LType settings has not been set.")
 		return
 	
+	# Set the settings as expected. Every setting name must correspond to its
+	# conjoined value, so ensure the names match properly. Check for spelling
+	# mistakes as well.
 	for c: LOptionItem in get_children():
 		var child_setting: String = c.option_name.to_lower().replace(" ", "_")
 		if ltype_ref.config.get(child_setting) == null:
