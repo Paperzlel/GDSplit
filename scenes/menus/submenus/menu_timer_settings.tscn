@@ -12,16 +12,16 @@ script = ExtResource("1_bn101")
 
 [node name="idle_color_setting" parent="." instance=ExtResource("1_4v33v")]
 layout_mode = 2
-option_name = "Idle Color"
+setting = "idle_color"
 
 [node name="playing_color_setting" parent="." instance=ExtResource("1_4v33v")]
 layout_mode = 2
-option_name = "Playing Color"
+setting = "playing_color"
 
 [node name="paused_color_setting" parent="." instance=ExtResource("1_4v33v")]
 layout_mode = 2
-option_name = "Paused Color"
+setting = "paused_color"
 
 [node name="finished_color_setting" parent="." instance=ExtResource("1_4v33v")]
 layout_mode = 2
-option_name = "Finished Color"
+setting = "finished_color"

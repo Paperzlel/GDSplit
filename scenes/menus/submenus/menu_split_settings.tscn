@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7jsdjw3sttw8"]
+[gd_scene load_steps=4 format=3 uid="uid://c7jsdjw3sttw8"]
 
 [ext_resource type="PackedScene" uid="uid://bluax0rdxgxte" path="res://scenes/option_items/option_item_number.tscn" id="1_nomus"]
 [ext_resource type="Script" uid="uid://by1m4g6i7m4lr" path="res://scripts/menus/submenus/menu_split_settings.gd" id="1_stmel"]
+[ext_resource type="PackedScene" uid="uid://b3anvab6v5mqh" path="res://scenes/option_items/option_item_check.tscn" id="3_1vk44"]
 
 [node name="menu_split_settings" type="VBoxContainer"]
 offset_right = 400.0
@@ -10,10 +11,22 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_stmel")
 
-[node name="option_item_number" parent="." instance=ExtResource("1_nomus")]
+[node name="visible_splits_setting" parent="." instance=ExtResource("1_nomus")]
 layout_mode = 2
-option_name = "Splits Visible"
+setting = "visible_splits"
 
-[node name="option_item_number2" parent="." instance=ExtResource("1_nomus")]
+[node name="splits_until_move_setting" parent="." instance=ExtResource("1_nomus")]
 layout_mode = 2
-option_name = "Splits Until End"
+setting = "splits_until_move"
+
+[node name="show_icons_setting" parent="." instance=ExtResource("3_1vk44")]
+layout_mode = 2
+setting = "show_icons"
+
+[node name="show_column_titles_setting" parent="." instance=ExtResource("3_1vk44")]
+layout_mode = 2
+setting = "show_column_titles"
+
+[node name="last_split_always_at_bottom_setting" parent="." instance=ExtResource("3_1vk44")]
+layout_mode = 2
+setting = "last_split_always_at_bottom"

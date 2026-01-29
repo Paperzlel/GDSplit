@@ -1,14 +1,16 @@
 [gd_scene load_steps=2 format=3 uid="uid://bar8hfk56tfl8"]
 
-[ext_resource type="Script" uid="uid://cn07qwqrnq0yl" path="res://scripts/split_column.gd" id="1_oe74p"]
+[ext_resource type="Script" uid="uid://cn07qwqrnq0yl" path="res://scripts/subtypes/split_column.gd" id="1_oe74p"]
 
 [node name="split_column" type="VBoxContainer"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(40, 23)
 offset_right = 40.0
 offset_bottom = 200.0
 size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_oe74p")
 
 [node name="title" type="Label" parent="."]
 layout_mode = 2
 text = "+/-"
+horizontal_alignment = 1

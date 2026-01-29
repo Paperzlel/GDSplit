@@ -72,8 +72,7 @@ func add_config_data_at(idx: int, d: Dictionary) -> void:
 		layout_contents.push_back(d)
 	else:
 		layout_contents.insert(idx, d)
-	var new_node: LType = Globals.create_new_ltype(d["type"])
-	contents_node.add_child(new_node)
+	var new_node: LType = add_new_node_from_item_dictionary(d)
 	if idx != -1:
 		contents_node.move_child(new_node, idx)
 
@@ -144,31 +143,19 @@ func get_ltype_from_index(idx: int) -> LType:
 
 ## Creates a new node and appends it to the tree, setting the configuration
 ## as defined in `dict`. This does not move the data in any way.
-func add_new_node_from_item_dictionary(dict: Dictionary) -> void:
+func add_new_node_from_item_dictionary(dict: Dictionary) -> LType:
 	if dict.get("type") >= Globals.ElementType.TYPE_MAX:
 		push_error("Type field is invalid, skipping adding node.")
-		return
+		return null
 
-	var node: LType
-	match dict["type"]:
-		Globals.ElementType.TYPE_TIMER:
-			node = (load("res://scenes/types/timer.tscn") as PackedScene).instantiate()
-		Globals.ElementType.TYPE_SPLITS:
-			node = (load("res://scenes/types/splits.tscn") as PackedScene).instantiate()
-		_:
-			node = null
-
-
-	if node == null:
-		push_error("Could not instantiate class " + str(int(dict["type"]) as \
-				Globals.ElementType) + " as it was not present in ClassDB.")
-		return
+	var node: LType = Globals.create_new_ltype(dict["type"])
 
 	if !node.apply_config(dict["config"]):
 		push_error("Failed to apply node config.")
 		node.queue_free()
-		return
+		return null
 
 	contents_node.add_child(node)
+	return node
 
 #endregion

@@ -15,11 +15,10 @@ func _ready() -> void:
 	# conjoined value, so ensure the names match properly. Check for spelling
 	# mistakes as well.
 	for c: LOptionItem in get_children():
-		var child_setting: String = c.option_name.to_lower().replace(" ", "_")
-		if ltype_ref.config.get(child_setting) == null:
-			push_error("Timer setting \"" + child_setting + "\" does not exist.")
+		if ltype_ref.config.get(c.setting) == null:
+			push_error("Timer setting \"" + c.setting + "\" does not exist.")
 			continue
-		c.set_item_value(ltype_ref.config[child_setting])
+		c.set_item_value(ltype_ref.config[c.setting])
 		c.value_updated.connect(_on_setting_updated)
 
 
