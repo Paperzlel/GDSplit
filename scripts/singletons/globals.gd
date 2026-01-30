@@ -174,11 +174,11 @@ func _ready() -> void:
 	check_and_update_if_needed(dict)
 	
 	# No previous layouts have been used, load the default.
-	if String(dict["last_file"]).is_empty():
+	if String(dict["last_layout"]).is_empty():
 		LayoutMetadata.load_default_layout()
 	
 	# No previous splits have been used, 
-	if String(dict["last_layout"]).is_empty():
+	if String(dict["last_file"]).is_empty():
 		return
 
 	# Split file used previously no longer exists, warn.
