@@ -54,6 +54,7 @@ static var _default_config: Dictionary = {
 	# Remember to type the columns on initialization!
 	"columns": [
 		{
+			# NOTE: This is essentially traits/structs. Use those when they come out.
 			"delta": Globals.ColumnType.DELTA,
 			"comparison": Globals.Comparison.CURRENT_COMPARISON,
 			"label": "+/-"
@@ -62,13 +63,6 @@ static var _default_config: Dictionary = {
 }
 
 var _current_config: Dictionary
-
-
-static var _default_column: Dictionary = {
-	"delta": Globals.ColumnType.DELTA,
-	"comparison": Globals.Comparison.CURRENT_COMPARISON,
-	"label": "",
-}
 
 #region Splits & Columns
 

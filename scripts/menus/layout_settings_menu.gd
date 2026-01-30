@@ -236,7 +236,7 @@ func _on_layout_setting_config_changed(obj: LTypeLayoutSettings) -> void:
 ## expect to be used. 
 func new_ltype_layout_settings(type: Globals.ElementType, config: Dictionary) -> LTypeLayoutSettings:
 	var ret: LTypeLayoutSettings = layout_type_res.instantiate()
-	var type_str: String =  str(Globals.ElementType.keys()[type]).right(-5).to_lower()
+	var type_str: String =  Globals.element_type_to_string(type)
 	type_str[0] = type_str[0].to_upper()
 	ret.type_name = type_str
 	ret.type = type

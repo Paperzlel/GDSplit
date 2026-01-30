@@ -1,7 +1,7 @@
 @tool
 @abstract
 class_name LOptionItem
-extends HSplitContainer
+extends Control
 
 
 signal value_updated(setting: String, item: Variant)
@@ -36,9 +36,17 @@ func update_values() -> void:
 
 
 func _ready() -> void:
-	# Convert setting to name
-	if !Engine.is_editor_hint():
-		_label.text = OptionRemaps.option_dict[_internal_setting]
+	# Convert setting to name if not in editor and name isn't empty
+	if !Engine.is_editor_hint() and !_internal_setting.is_empty():
+		var value = OptionRemaps.option_dict.get(_internal_setting)
+		if value == null:
+			_label.text = ""
+			_label.hide()
+			return
+		else:
+			_label.show()		# Show, if not explicitly hidden.
+		
+		_label.text = value
 		if typeof(get_item_value()) == TYPE_NIL:
 			push_error("OptionItem " + _internal_setting + " of class " + get_class() + " has no override for get_item_value()")
 		

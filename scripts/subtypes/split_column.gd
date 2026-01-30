@@ -12,6 +12,15 @@ var show_title: bool = false
 @onready var title_label: Label = $title
 
 
+## The default column layout. Slightly different from the default splits
+## in that it has no initial label.
+static var _default_column: Dictionary = {
+	"delta": Globals.ColumnType.DELTA,
+	"comparison": Globals.Comparison.CURRENT_COMPARISON,
+	"label": "",
+}
+
+
 func setup_column(cfg: Dictionary, parent: LSplits) -> void:
 	column_type = cfg["delta"]
 	comparison = cfg["comparison"]
