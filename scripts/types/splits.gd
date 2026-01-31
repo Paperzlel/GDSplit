@@ -45,7 +45,7 @@ var column_data: Array[Dictionary] = []
 ## The resource for a left hand column split row.
 @onready var split_row_res: PackedScene = preload("res://scenes/types/subtypes/split_left_row.tscn")
 
-static var _default_config: Dictionary = {
+static var _default_config: Dictionary[String, Variant] = {
 	"visible_splits": 5,
 	"splits_until_move": 2,
 	"show_icons": false,
@@ -99,55 +99,45 @@ func save_config() -> Dictionary:
 	return _current_config
 
 
-## Implementation of the `LType` class function.
-func apply_config(cfg: Dictionary) -> bool:
-	if cfg.get("visible_splits") == null || cfg.get("splits_until_move") == null || \
-			cfg.get("show_icons") == null || cfg.get("last_split_always_at_bottom") == null || \
-			cfg.get("columns") == null:
-		push_error("Failed to get proper data from LSplit dictionary.")
-		printerr("Invalid LSplits dictionary: " + JSON.stringify(cfg, "\t") + "\n")
-
-	# Set variables
-	splits_visible = cfg["visible_splits"]
-	splits_until_move = cfg["splits_until_move"]
-	icons_visible = cfg["show_icons"]
-	show_column_titles = cfg["show_column_titles"]
-	last_split_always_at_bottom = cfg["last_split_always_at_bottom"]
-
-	# Type array if not typed yet
-	if !cfg["columns"].is_typed():
-		cfg["columns"] = Array(cfg["columns"], TYPE_DICTIONARY, "", null)
-	# Setup columns (TODO: Sanity-check typing)
-	column_data = cfg["columns"]
-	# Clear data first (TODO: Could use column count instead)
-	reset_columns.call_deferred()
-	for d: Dictionary in column_data:
-		# TODO: Should return a value of sorts, for tracking it.
-		# Call function as deferred since it needs to wait until this function's
-		# ready to work properly.
-		create_column.call_deferred(d)
-
+func apply_setting(setting: String, value: Variant) -> void:
+	match setting:
+		"visible_splits":
+			splits_visible = value
+		"splits_until_move":
+			splits_until_move = value
+		"show_icons":
+			icons_visible = value
+		"show_column_titles":
+			show_column_titles = value
+		"last_split_always_at_bottom":
+			last_split_always_at_bottom = value
+		"columns":
+			if !(value as Array[Dictionary]).is_typed():
+				value = Array(value, TYPE_DICTIONARY, "", null)
+			column_data = value
+			reset_columns.call_deferred()
+			for d: Dictionary in column_data:
+				# TODO: Should return a value of sorts, for tracking it.
+				# Call function as deferred since it needs to wait until this function's
+				# ready to work properly.
+				create_column.call_deferred(d)
+		_:
+			push_error("Setting %s not found in class LSplits." % setting)
+	
 	# Apply variables
-	var tmp: Label = Label.new()
-	var h: int = tmp.get_theme_font("font").get_height() as int
-	tmp.free()
 
 	# Force-set custom min size to label size.
+	var h: int = get_theme_font("font").get_height() as int
 	custom_minimum_size.y = h
 	for i in range(splits_visible):
 		# TODO: separation height
 		custom_minimum_size.y += h + 4
-	
-
-	# Copy reference, so we can change the data more easily.
-	_current_config = cfg
-	return true
 
 
 ## Implementation of the `LType` class function.
-static func get_default_config() -> Dictionary:
+static func get_default_config() -> Dictionary[String, Variant]:
 	return _default_config
-
+	
 
 #endregion
 #region Virtual Functions
@@ -155,9 +145,8 @@ static func get_default_config() -> Dictionary:
 
 func _ready() -> void:
 	Globals.split_incremented.connect(_on_splits_incremented)
-	## TODO: setup
 	print(_default_config)
-	pass
+	super._ready()
 
 
 func _on_splits_incremented(_counter: int) -> void:

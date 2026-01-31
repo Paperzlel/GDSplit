@@ -7,7 +7,7 @@ extends LOptionItem
 var _internal_number: int = 0
 
 ## Reference to the `SpinBox` used to set the values. 
-@onready var _sbox: SpinBox = $MarginContainer/SpinBox
+@onready var _sbox: SpinBox = $"MarginContainer/SpinBox"
 
 ## The number to use for this value. Overriden by the defaults.
 @export var number: int:
@@ -21,7 +21,7 @@ var _internal_number: int = 0
 
 ## Overrides the `OptionItem` definition.
 func get_item_value() -> Variant:
-    return new()
+    return _internal_number
 
 
 ## Overrides the `OptionItem` definition.

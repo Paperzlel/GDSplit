@@ -67,22 +67,24 @@ func save_config() -> Dictionary:
 
 
 ## Implementation of the `LType` class function.
-func apply_config(cfg: Dictionary) -> bool:
-	if cfg.get("idle_color") == null || cfg.get("playing_color") == null || cfg.get("paused_color") == null || cfg.get("finished_color") == null:
-		push_error("Failed to get color data for LTimer from dictionary.")
-		return false
+func apply_setting(setting: String, value: Variant) -> void:
+	match setting:
+		"idle_color":
+			_idle_color = value
+		"playing_color":
+			_playing_color = value
+		"paused_color":
+			_paused_color = value
+		"finished_color":
+			_finished_color = value
+		_:
+			push_error("Setting %s not found in class LTimer." % setting)
 	
-	_idle_color = cfg["idle_color"]
-	_playing_color = cfg["playing_color"]
-	_paused_color = cfg["paused_color"]
-	_finished_color = cfg["finished_color"]
-	# Assumes on-the-fly changes aren't being made. Fix if it becomes an issue.
 	set_timer_colour(_idle_color)
-	return true
 
 
 ## Implementation of the `LType` class function.
-static func get_default_config() -> Dictionary:
+static func get_default_config() -> Dictionary[String, Variant]:
 	return { 
 		"idle_color": Color.WHITE,
 		"playing_color": Color.SEA_GREEN,

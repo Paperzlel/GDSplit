@@ -116,9 +116,9 @@ func check_and_update_if_needed(file: Dictionary) -> void:
 
 ## Creates a new `Object` of class `LType`, which is our main class for any
 ## elements we display in the layout.
-func create_new_ltype(type: ElementType) -> LType:
+func create_new_ltype(cfg: LLayoutConfig) -> LType:
 	var ret: LType
-	match type:
+	match cfg.get_type():
 		ElementType.TYPE_TIMER:
 			ret = (load("res://scenes/types/timer.tscn") as PackedScene).instantiate()
 		ElementType.TYPE_SPLITS:
@@ -127,8 +127,31 @@ func create_new_ltype(type: ElementType) -> LType:
 			ret = null
 		
 	if ret == null:
-		push_error("Could not instantiate class of type " + str(ElementType.find_key(type)) + 
+		push_error("Could not instantiate class of type " + str(ElementType.find_key(cfg.get_type())) + 
 		" as it was not present in ClassDB.")
+	ret.config = cfg
+	# Apply all settings from the config
+	ret.post_creation()
+	return ret
+
+
+func create_new_layout_config(type: ElementType) -> LLayoutConfig:
+	var ret: LLayoutConfig
+	match type:
+		ElementType.TYPE_TIMER:
+			ret = LLayoutConfigTimer.new()
+		ElementType.TYPE_SPLITS:
+			ret = LLayoutConfigSplits.new()
+		_:
+			ret = null
+	if ret == null:
+		push_error("Failed to instantiate class \"" + str(ElementType.find_key(type)) + "\".")
+	return ret
+
+
+func create_new_layout_config_from_dictionary(d: Dictionary) -> LLayoutConfig:
+	var ret: LLayoutConfig = create_new_layout_config(d["type"])
+	ret._dict = d["config"]
 	return ret
 
 

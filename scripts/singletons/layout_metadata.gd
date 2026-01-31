@@ -67,11 +67,11 @@ func remove_config_data_at(idx: int) -> void:
 ## Adds config data and a corresponding `LType` at the given position. If the
 ## position is -1, (indicative of a node-not-found error elsewhere), then the
 ## content is appended at the end of the dictionary.
-func add_config_data_at(idx: int, d: Dictionary) -> void:
+func add_config_data_at(idx: int, d: LLayoutConfig) -> void:
 	if idx == -1:
-		layout_contents.push_back(d)
+		layout_contents.push_back(d.get_serialized_data() as Dictionary)
 	else:
-		layout_contents.insert(idx, d)
+		layout_contents.insert(idx, d.get_serialized_data() as Dictionary)
 	var new_node: LType = add_new_node_from_item_dictionary(d)
 	if idx != -1:
 		contents_node.move_child(new_node, idx)
@@ -88,7 +88,7 @@ func load_default_layout() -> void:
 	# Set contents node, order can change sometimes
 	if contents_node == null:
 		contents_node = $"/root/contents"
-	add_new_node_from_item_dictionary(layout_contents[0])
+	add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(layout_contents[0]))
 	print_verbose("Default layout loaded.")
 
 
@@ -106,7 +106,7 @@ func load_layout_from_dictionary(dict: Dictionary) -> bool:
 
 	# Initialize new nodes into the tree from the config
 	for d: Dictionary in contents:
-		add_new_node_from_item_dictionary(d)
+		add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(d))
 
 	# Parsing went well, we can use the layout metadata. All references to sub-data
 	# remain constant, 
@@ -143,19 +143,14 @@ func get_ltype_from_index(idx: int) -> LType:
 
 ## Creates a new node and appends it to the tree, setting the configuration
 ## as defined in `dict`. This does not move the data in any way.
-func add_new_node_from_item_dictionary(dict: Dictionary) -> LType:
-	if dict.get("type") >= Globals.ElementType.TYPE_MAX:
+func add_new_node_from_item_dictionary(cfg: LLayoutConfig) -> LType:
+	if cfg.get_type() >= Globals.ElementType.TYPE_MAX:
 		push_error("Type field is invalid, skipping adding node.")
 		return null
 
-	var node: LType = Globals.create_new_ltype(dict["type"])
-
-	if !node.apply_config(dict["config"]):
-		push_error("Failed to apply node config.")
-		node.queue_free()
-		return null
-
-	contents_node.add_child(node)
+	var node: LType = Globals.create_new_ltype(cfg)
+	if node != null:
+		contents_node.add_child(node)
 	return node
 
 #endregion

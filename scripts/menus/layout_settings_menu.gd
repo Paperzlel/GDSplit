@@ -87,17 +87,21 @@ func move_object_down(object : Control) -> void:
 func _ready() -> void:
 	# Should have a layout list from the globals by now, create the initial
 	# layout list. 
+	var i: int = 0
 	for d: Dictionary in LayoutMetadata.layout_contents:
-		var node: LTypeLayoutSettings = new_ltype_layout_settings(d["type"], d["config"])
+		# Ensure that the resource is shared between objects
+		var lt: LType = LayoutMetadata.get_ltype_from_index(i)
+		var node: LTypeLayoutSettings = new_ltype_layout_settings(lt.config)
 		layout_list.add_child(node)
+		i += 1
 	# We only need to reference it once. Both options get updated whenever
 	# a write occurs. It's the joys of Dictionaries!
 	cached_contents = LayoutMetadata.layout_contents
 
 	# Add all types
 	element_list_popup = PopupMenu.new()
-	for i in range(Globals.ElementType.TYPE_MAX):
-		var n: String = Globals.element_type_to_string(i)
+	for j in range(Globals.ElementType.TYPE_MAX):
+		var n: String = Globals.element_type_to_string(j)
 		element_list_popup.add_item(n)
 	add_child(element_list_popup)
 	element_list_popup.index_pressed.connect(_on_new_layout_element_selected)
@@ -183,21 +187,17 @@ func _on_clear_layout_pressed() -> void:
 ## new element in and initializes its default data.
 func _on_new_layout_element_selected(idx: int) -> void:
 	var type_enum: Globals.ElementType = Globals.string_to_element_type(element_list_popup.get_item_text(idx))
-	# Create a new temporary node for the type
-	var tmp: LType = Globals.create_new_ltype(type_enum)
-	var d: Dictionary
-	d["config"] = tmp.get_default_config()
-	d["type"] = type_enum
-	tmp.queue_free()
+	# Create new LLayoutConfig for the specific object
+	var cfg: LLayoutConfig = Globals.create_new_layout_config(type_enum)
 	# Append data and update cache (new elements are inserted after the current
 	# focus or at the end if none is selected)
 	var lidx: int = get_layout_idx(current_focus) if current_focus != null else -1
-	var node: LTypeLayoutSettings = new_ltype_layout_settings(type_enum, d["config"])
+	var node: LTypeLayoutSettings = new_ltype_layout_settings(cfg)
 	if node != null:
 		layout_list.add_child(node)
 		if lidx != -1 and lidx < cached_contents.size():
 			layout_list.move_child(node, lidx + 1)
-		LayoutMetadata.add_config_data_at(lidx, d)
+		LayoutMetadata.add_config_data_at(lidx, cfg)
 	else:
 		push_error("Layout settings node was null. Unable to add to tree.")
 
@@ -213,42 +213,24 @@ func _on_current_object_list_focused(obj: Control) -> void:
 		n.focus_updated(obj)
 
 
-## Called whenever an element type has its corresponding settings configuration
-## change. Since changing settings doesn't change node order, we can safely
-## access the type directly and apply its settings from here. NOTE: Assumes
-## child order for the layout list and contents are the same.
-func _on_layout_setting_config_changed(obj: LTypeLayoutSettings) -> void:
-	var idx: int = layout_list.get_children().find(obj)
-	if idx == -1:
-		push_error("Child object " + obj.type_name + " could not be found in parent.")
-		return
-
-	var lt: LType = LayoutMetadata.get_ltype_from_index(idx)
-
-	if !lt.apply_config(obj.config):
-		push_error("Could not apply config for node " + lt.name + " (type \"" + Globals.element_type_to_string(obj.type) + "\")")
-
-
 #endregion
 #region Utility functions
 
 ## Creates a new class of type `LTypeLayoutSettings` and sets the defaults we
 ## expect to be used. 
-func new_ltype_layout_settings(type: Globals.ElementType, config: Dictionary) -> LTypeLayoutSettings:
+func new_ltype_layout_settings(cfg: LLayoutConfig) -> LTypeLayoutSettings:
 	var ret: LTypeLayoutSettings = layout_type_res.instantiate()
-	var type_str: String =  Globals.element_type_to_string(type)
-	type_str[0] = type_str[0].to_upper()
+	var type_str: String =  Globals.element_type_to_string(cfg.get_type())
 	ret.type_name = type_str
-	ret.type = type
-	ret.config = config
+	ret.type = cfg.get_type()
 	ret.update_current_focus.connect(_on_current_object_list_focused)
-	ret.config_changed.connect(_on_layout_setting_config_changed)
 	# Attach sibling settings menu once set up
-	var menu_settings: LMenuSettings = new_lmenu_settings(ret)
+	var menu_settings: LMenuSettings = new_lmenu_settings(cfg)
 	if menu_settings != null:
 		settings_list.add_child(menu_settings)
+		print_orphan_nodes()
 		settings_list.set_tab_title(settings_list.get_children().find(menu_settings), 
-				Globals.element_type_to_string(menu_settings.ltype_ref.type))
+				Globals.element_type_to_string(menu_settings.cfg.get_type()))
 	else:
 		push_error("Unable to create LMenuSettings.")
 		return null
@@ -257,9 +239,9 @@ func new_ltype_layout_settings(type: Globals.ElementType, config: Dictionary) ->
 
 ## Creates a new class of type `LMenuSettings` and initializes its defaults as
 ## expected.
-func new_lmenu_settings(type: LTypeLayoutSettings) -> LMenuSettings:
+func new_lmenu_settings(cfg: LLayoutConfig) -> LMenuSettings:
 	var ret: LMenuSettings = null
-	match type.type:
+	match cfg.get_type():
 		Globals.ElementType.TYPE_TIMER:
 			ret = menu_timer_res.instantiate() as LMenuSettings
 		Globals.ElementType.TYPE_SPLITS:
@@ -267,7 +249,7 @@ func new_lmenu_settings(type: LTypeLayoutSettings) -> LMenuSettings:
 		_:
 			push_error("LTypeLayoutSettings had an invalid or unregistered type!")
 			return null
-	ret.ltype_ref = type
+	ret.cfg = cfg
 	return ret
 
 
