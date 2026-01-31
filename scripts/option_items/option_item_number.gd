@@ -16,7 +16,7 @@ var _internal_number: int = 0
     set(value):
         _internal_number = value
         if _sbox != null:
-            _sbox.value = number
+            _sbox.value = value
 
 
 ## Overrides the `OptionItem` definition.
@@ -27,13 +27,6 @@ func get_item_value() -> Variant:
 ## Overrides the `OptionItem` definition.
 func set_item_value(value: Variant) -> void:
     number = value
-
-
-## Overrides the `OptionItem` definition.
-func update_values() -> void:
-    number = _internal_number
-    value_updated.emit(setting, number)
-    super.update_values()
 
 
 func _ready() -> void:

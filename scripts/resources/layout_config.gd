@@ -37,7 +37,7 @@ func get_type() -> Globals.ElementType:
 
 
 func write_setting(setting: String, value: Variant) -> bool:
-	if !_dict.get(setting):
+	if _dict.get(setting) == null:
 		return false
 	
 	_dict[setting] = value

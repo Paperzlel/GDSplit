@@ -32,13 +32,6 @@ func set_item_value(value: Variant) -> void:
 	color = value
 
 
-## Overrides the `OptionItem` definition.
-func update_values() -> void:
-	color = _internal_color
-	value_updated.emit(setting, color)
-	super.update_values()
-
-
 func _ready() -> void:
 	update_values()
 	_color_picker.color_changed.connect(_on_color_changed)

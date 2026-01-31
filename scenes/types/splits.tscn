@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq2hgpnqfonf3"]
+[gd_scene format=3 uid="uid://cq2hgpnqfonf3"]
 
 [ext_resource type="Script" uid="uid://cmfxw5yximjfk" path="res://scripts/types/splits.gd" id="1_ea5bg"]
 
-[node name="splits" type="HBoxContainer"]
+[node name="splits" type="HBoxContainer" unique_id=500857230]
 custom_minimum_size = Vector2(40, 0)
 offset_right = 300.0
 offset_bottom = 200.0
@@ -10,9 +10,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ea5bg")
 
-[node name="left" type="VBoxContainer" parent="."]
+[node name="left" type="VBoxContainer" parent="." unique_id=989546812]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="right" type="HBoxContainer" parent="."]
+[node name="right" type="HBoxContainer" parent="." unique_id=185137815]
 layout_mode = 2

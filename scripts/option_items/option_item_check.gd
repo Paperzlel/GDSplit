@@ -32,13 +32,6 @@ func set_item_value(value: Variant) -> void:
     checked = bool(value)
 
 
-## Overrides the `OptionItem` definition.
-func update_values() -> void:
-    checked = _internal_checked
-    value_updated.emit(setting, checked)
-    super.update_values()
-
-
 func _ready() -> void:
     update_values()
     _box.toggled.connect(_on_check_button_toggled)

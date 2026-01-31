@@ -3,11 +3,12 @@
 class_name LOptionItem
 extends Control
 
-
-signal value_updated(setting: String, item: Variant)
-
 ## The internal setting the child refers to. Set by the user. Don't touch.
 var _internal_setting: String = ""
+
+## The shared config that the option is a part of. Updates other nodes that
+## reference the data when written to.
+var config: LLayoutConfig = null
 
 ## Reference to the "name" label that displays the text.
 @onready var _label: Label = $"name"
@@ -33,6 +34,8 @@ func set_item_value(value: Variant) -> void
 ## Quick validation that all our variables are appropriately designated.
 func update_values() -> void:
 	setting = _internal_setting
+	if config != null:
+		config.write_setting(setting, get_item_value())
 
 
 func _ready() -> void:

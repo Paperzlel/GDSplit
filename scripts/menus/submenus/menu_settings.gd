@@ -20,9 +20,4 @@ func _ready() -> void:
 			push_error("Timer setting \"" + c.setting + "\" does not exist.")
 			continue
 		c.set_item_value(cfg_dict[c.setting])
-		c.value_updated.connect(_on_setting_updated)
-
-
-func _on_setting_updated(setting: String, value: Variant) -> void:
-	# Update the element settings. 
-	cfg.write_setting(setting, value)
+		c.config = cfg
