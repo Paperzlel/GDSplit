@@ -228,7 +228,6 @@ func new_ltype_layout_settings(cfg: LLayoutConfig) -> LTypeLayoutSettings:
 	var menu_settings: LMenuSettings = new_lmenu_settings(cfg)
 	if menu_settings != null:
 		settings_list.add_child(menu_settings)
-		print_orphan_nodes()
 		settings_list.set_tab_title(settings_list.get_children().find(menu_settings), 
 				Globals.element_type_to_string(menu_settings.cfg.get_type()))
 	else:
