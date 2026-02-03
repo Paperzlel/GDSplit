@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bluax0rdxgxte" path="res://scenes/option_items/option_item_number.tscn" id="1_nomus"]
 [ext_resource type="Script" uid="uid://by1m4g6i7m4lr" path="res://scripts/menus/submenus/menu_split_settings.gd" id="1_stmel"]
 [ext_resource type="PackedScene" uid="uid://b3anvab6v5mqh" path="res://scenes/option_items/option_item_check.tscn" id="3_1vk44"]
+[ext_resource type="PackedScene" uid="uid://cw36ks1rok3m" path="res://scenes/option_items/option_item_array.tscn" id="4_8n6eq"]
 
 [node name="menu_split_settings" type="VBoxContainer" unique_id=1760433600]
 offset_right = 400.0
@@ -35,3 +36,8 @@ setting = "show_column_titles"
 layout_mode = 2
 split_offsets = PackedInt32Array(300)
 setting = "last_split_always_at_bottom"
+
+[node name="option_item_array" parent="." unique_id=2026357834 instance=ExtResource("4_8n6eq")]
+layout_mode = 2
+array_hint = 0
+setting = "columns"

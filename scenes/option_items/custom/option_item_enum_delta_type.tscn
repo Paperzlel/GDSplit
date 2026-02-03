@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://b0gl2u40liud6"]
+
+[ext_resource type="Script" uid="uid://py7us0d6f5sq" path="res://scripts/option_items/custom/option_item_enum_delta_type.gd" id="1_vmut4"]
+
+[node name="option_item_enum" type="HSplitContainer" unique_id=1785228947]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+split_offsets = PackedInt32Array(300)
+dragging_enabled = false
+split_offset = 300
+script = ExtResource("1_vmut4")
+enum_option = 2
+
+[node name="name" type="Label" parent="." unique_id=1220679997]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1531406876]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer" unique_id=466199170]
+layout_mode = 2

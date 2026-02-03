@@ -10,9 +10,9 @@ extends LType
 # "show_title" (bool)
 # "last_split_always_at_bottom" (bool)
 # "columns": (Array of Dictionaries)
-# 	"delta": (ColumnType)
-# 	"comparison": (Comparison)
-# 	"label": (string)
+# 	"column_delta": (ColumnType)
+# 	"column_comparison": (Comparison)
+# 	"column_label": (string)
 
 ## Number of splits visible at any one time.
 var splits_visible: int = 5
@@ -55,9 +55,9 @@ static var _default_config: Dictionary[String, Variant] = {
 	"columns": [
 		{
 			# NOTE: This is essentially traits/structs. Use those when they come out.
-			"delta": Globals.ColumnType.DELTA,
-			"comparison": Globals.Comparison.CURRENT_COMPARISON,
-			"label": "+/-"
+			"column_delta": Globals.DeltaType.DELTA,
+			"column_comparison": Globals.ComparisonType.CURRENT_COMPARISON,
+			"column_label": "+/-"
 		}
 	]
 }
@@ -145,7 +145,6 @@ static func get_default_config() -> Dictionary[String, Variant]:
 
 func _ready() -> void:
 	Globals.split_incremented.connect(_on_splits_incremented)
-	print(_default_config)
 	super._ready()
 
 

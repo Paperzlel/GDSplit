@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cw36ks1rok3m"]
+
+[ext_resource type="Script" uid="uid://bullych52kvq8" path="res://scripts/option_items/option_item_array.gd" id="1_wwqdi"]
+
+[node name="option_item_array" type="MarginContainer" unique_id=2026357834]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_wwqdi")
+
+[node name="all_contents" type="VBoxContainer" parent="." unique_id=881507950]
+layout_mode = 2
+
+[node name="header" type="HBoxContainer" parent="all_contents" unique_id=746007557]
+layout_mode = 2
+
+[node name="name" type="Label" parent="all_contents/header" unique_id=1681234966]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="all_contents/header" unique_id=2053116555]
+layout_mode = 2
+text = "Add Data"
+
+[node name="items" type="VBoxContainer" parent="all_contents" unique_id=251385729]
+layout_mode = 2

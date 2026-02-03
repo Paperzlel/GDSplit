@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bnhj7ajsyy2uv"]
+
+[node name="option_item_dictionary" type="VBoxContainer" unique_id=603835942]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1810700500]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="config_options" type="VBoxContainer" parent="MarginContainer" unique_id=514574]
+layout_mode = 2
+
+[node name="button_options" type="HBoxContainer" parent="." unique_id=1385347247]
+layout_mode = 2
+
+[node name="move_up_button" type="Button" parent="button_options" unique_id=1495795050]
+layout_mode = 2
+text = "Move Up"
+
+[node name="move_down_button" type="Button" parent="button_options" unique_id=863215392]
+layout_mode = 2
+text = "Move Down"
+
+[node name="remove_button" type="Button" parent="button_options" unique_id=1784853966]
+layout_mode = 2
+text = "Remove"

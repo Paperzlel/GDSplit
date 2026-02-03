@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://ylen5u2j8bdw"]
+
+[ext_resource type="PackedScene" uid="uid://b0gl2u40liud6" path="res://scenes/option_items/custom/option_item_enum_delta_type.tscn" id="1_6xb8c"]
+[ext_resource type="Script" uid="uid://bric6hw6rgpgc" path="res://scripts/option_items/custom/option_item_dictionary_column.gd" id="1_oxp17"]
+[ext_resource type="PackedScene" uid="uid://bdp3fbexv647x" path="res://scenes/option_items/custom/option_item_enum_comparison_type.tscn" id="3_wi576"]
+
+[node name="option_item_dictionary_column" type="VBoxContainer" unique_id=603835942]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_oxp17")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1810700500]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="config_options" type="VBoxContainer" parent="MarginContainer" unique_id=514574]
+layout_mode = 2
+
+[node name="column_delta_option" parent="MarginContainer/config_options" unique_id=1785228947 instance=ExtResource("1_6xb8c")]
+layout_mode = 2
+setting = "column_delta"
+
+[node name="column_comparison_option" parent="MarginContainer/config_options" unique_id=1348273248 instance=ExtResource("3_wi576")]
+layout_mode = 2
+setting = "column_comparison"
+
+[node name="button_options" type="HBoxContainer" parent="." unique_id=1385347247]
+layout_mode = 2
+
+[node name="move_up_button" type="Button" parent="button_options" unique_id=1495795050]
+layout_mode = 2
+text = "Move Up"
+
+[node name="move_down_button" type="Button" parent="button_options" unique_id=863215392]
+layout_mode = 2
+text = "Move Down"
+
+[node name="remove_button" type="Button" parent="button_options" unique_id=1784853966]
+layout_mode = 2
+text = "Remove"

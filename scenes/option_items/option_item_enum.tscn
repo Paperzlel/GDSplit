@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b1yn5vho1p28x"]
+
+[node name="option_item_enum" type="HSplitContainer" unique_id=1785228947]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+split_offsets = PackedInt32Array(300)
+dragging_enabled = false
+split_offset = 300
+
+[node name="name" type="Label" parent="." unique_id=1220679997]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1531406876]
+layout_mode = 2
+
+[node name="MenuButton" type="MenuButton" parent="MarginContainer" unique_id=952112947]
+layout_mode = 2

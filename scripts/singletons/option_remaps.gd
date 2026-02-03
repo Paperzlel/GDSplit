@@ -16,5 +16,10 @@ static var option_dict: Dictionary[String, String] = {
     "show_column_titles": "Show Column Titles",
     "last_split_always_at_bottom": "Final Split Always At Bottom",
     "columns": "Columns",
-    # (we don't have a way to modify columns just yet)
+
+    "column_delta": "Column Delta",
+    "column_comparison": "Column Comparison",
+    "column_label": "Column Label",
+
+    "test": "Test",
 }

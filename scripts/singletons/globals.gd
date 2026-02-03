@@ -23,7 +23,7 @@ signal split_incremented(counter: int)
 ## The type of comparison being ran. The default comparison option
 ## refers to the type pointed to in this class, which is set via
 ## the `default_comparison` setting or by cycling hotkeys.
-enum Comparison
+enum ComparisonType
 {
 	## The currently running global comparison
 	CURRENT_COMPARISON,
@@ -36,11 +36,13 @@ enum Comparison
 	AVERAGE_TIME,
 	## The worst time achieved on this segment
 	WORST_TIME,
+	## Invalid comparison.
+	TYPE_MAX
 }
 
 ## The kind of calculation that is ran whenever updating a value that obeys
 ## these types.
-enum ColumnType
+enum DeltaType
 {
 	## The difference between the overall running time and the segment's time.
 	## Multiple segments will accumulate on this value.
@@ -58,6 +60,8 @@ enum ColumnType
 	## Before completion, shows the segment delta. Once completed, shows the
 	## split delta.
 	SEGMENT_DELTA_SEGMENT_TIME,
+	## Invalid delta type.
+	TYPE_MAX
 }
 
 ## The different type of elements we can have. Declaring these and using them
@@ -155,6 +159,10 @@ func create_new_layout_config_from_dictionary(d: Dictionary) -> LLayoutConfig:
 	return ret
 
 
+#endregion
+#region Enum type conversion
+
+
 ## Converts a value from the `ElementType` enum to a String.
 func element_type_to_string(type: ElementType) -> String:
 	var ret: String = ElementType.keys()[type] as String
@@ -168,6 +176,43 @@ func element_type_to_string(type: ElementType) -> String:
 func string_to_element_type(input_str: String) -> ElementType:
 	input_str = "TYPE_" + input_str.to_upper()
 	return ElementType.get(input_str)
+
+
+func delta_type_to_string(type: DeltaType) -> String:
+	var ret: String = DeltaType.keys()[type] as String
+	return _key_to_string(ret)
+
+
+func string_to_delta_type(input_str: String) -> DeltaType:
+	input_str = input_str.to_upper().replace(" ", "_")
+	return DeltaType.get(input_str)
+
+
+func comparison_type_to_string(type: ComparisonType) -> String:
+	var ret: String = ComparisonType.keys()[type] as String
+	return _key_to_string(ret)
+
+
+func string_to_comparison_type(input_str: String) -> ComparisonType:
+	input_str = input_str.to_upper().replace(" ", "_")
+	return ComparisonType.get(input_str)
+
+
+func _key_to_string(key: String) -> String:
+	var ret_cpy: String = key
+	key = key.to_lower()
+
+	key[0] = key[0].to_upper()
+	var i: int = ret_cpy.find("_")
+	var total: int = 0
+	while i != -1:
+		i += 1
+		total += i
+		key[total] = key[total].to_upper()
+		ret_cpy = ret_cpy.right(-i)
+		i = ret_cpy.find("_")
+	key = key.replace("_", " ")
+	return key
 
 
 #endregion
