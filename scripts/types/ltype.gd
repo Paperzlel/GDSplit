@@ -16,7 +16,7 @@ func save_config() -> Dictionary
 func apply_setting(setting: String, value: Variant) -> void
 
 func post_creation() -> void:
-    var settings: Dictionary[String, Variant] = config.get_serialized_data()
+    var settings: Dictionary[String, Variant] = config.get_config()
     for c: String in settings:
         apply_setting(c, settings[c])
 

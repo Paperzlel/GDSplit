@@ -35,7 +35,7 @@ var _internal_array: Array[Dictionary] = []
 			return
 		
 		_internal_array = value
-		update_list()
+		rebuild_list()
 		update_configuration_warnings()
 
 
@@ -56,7 +56,10 @@ func check_modifications_against(input: Array[Dictionary]) -> bool:
 	return true
 
 
-func update_list() -> void:
+## Clears the current item list and rebuilds it entirely. This is done only
+## when the entire list has been potentially re-written and therefore any data
+## could be invalid and needs to be cleared.
+func rebuild_list() -> void:
 	# Clear out list first if there are children to clear
 	if _child_array.get_child_count() > 0:
 		var child: Node = _child_array.get_child(0)
@@ -70,21 +73,28 @@ func update_list() -> void:
 	
 	# Re-build from data
 	for d: Dictionary in _internal_array:
-		var new_options: LOptionItem
-		match array_hint:
-			ArrayHint.HINT_COLUMN:
-				new_options = (load("uid://ylen5u2j8bdw") as PackedScene).instantiate()
-			ArrayHint.HINT_INVALID:
-				new_options = null
+		create_new_child(d)
 
-		if new_options == null:
-			push_error("Could not load LOptionItemArray's data as the array hint was invalid.")
-			return
-		
-		new_options.config = null
-		new_options.setting_updated.connect(_on_sub_setting_value_updated)
-		new_options.set_item_value(d)
-		_child_array.add_child(new_options)
+
+func create_new_child(data: Dictionary) -> void:
+	var new_options: LOptionItemDictionary
+	match array_hint:
+		ArrayHint.HINT_COLUMN:
+			new_options = (load("uid://ylen5u2j8bdw") as PackedScene).instantiate()
+		ArrayHint.HINT_INVALID:
+			new_options = null
+
+	if new_options == null:
+		push_error("Could not load LOptionItemArray's data as the array hint was invalid.")
+		return
+	
+	new_options.config = null
+	new_options.setting_updated.connect(_on_sub_setting_value_updated)
+	new_options.move_up_requested.connect(_on_child_move_up_requested)
+	new_options.move_down_requested.connect(_on_child_move_down_requested)
+	new_options.remove_requested.connect(_on_child_remove_requested)
+	new_options.set_item_value(data)
+	_child_array.add_child(new_options)
 
 
 func get_item_value() -> Variant:
@@ -108,10 +118,65 @@ func _on_sub_setting_value_updated(opt_setting: String, value: Variant, item: LO
 		return
 	
 	var d: Dictionary = array[idx]
-	if d.get(opt_setting) == null:
+	if !d.has(opt_setting):
 		push_error("Setting \"" + opt_setting + "\" not found in option item array.")
 		return
 
 	d[opt_setting] = value
-	update_list()
+	update_values()
+
+
+func _move_child_around(child: LOptionItemDictionary, up: bool) -> void:
+	# Move data from position N to position N - 1
+	# if child count = 1, do nothing
+	# if pos = 0, do nothing
+	# else, get data reference, remove from array, insert at N - 1, move visual node as well, done.
+	if _child_array.get_child_count() == 1:
+		return
+
+	if child not in _child_array.get_children():
+		return # NOTE: Possibly an error, silent about it for now
+	
+	var pos: int = _child_array.get_children().find(child)
+	if pos == 0:
+		return
+
+	var data: Dictionary = _internal_array.pop_at(pos)
+	pos = pos - 1 if up else pos + 1
+	_internal_array.insert(pos, data)
+	_child_array.move_child(child, pos)
+
+
+func _on_child_move_up_requested(child: LOptionItemDictionary) -> void:
+	_move_child_around(child, true)
+
+
+func _on_child_move_down_requested(child: LOptionItemDictionary) -> void:
+	_move_child_around(child, false)
+
+
+func _on_child_remove_requested(child: LOptionItemDictionary) -> void:
+	if child not in _child_array.get_children(): return
+
+	var pos: int = _child_array.get_children().find(child)
+	_internal_array.remove_at(pos)
+	_child_array.remove_child(child)
+	# TODO: Notify column removal (they don't render right now)
+	child.queue_free()
+	update_values()
+
+
+func _on_child_add_requested() -> void:
+	var d: Dictionary
+	match array_hint:
+		ArrayHint.HINT_COLUMN:
+			d = LSplitColumn._default_column
+		ArrayHint.HINT_INVALID:
+			d = {}
+	
+	if d.is_empty():
+		return
+	
+	create_new_child(d)
+	array.append(d)
 	update_values()

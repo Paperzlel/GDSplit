@@ -27,3 +27,5 @@ text = "Add Data"
 
 [node name="items" type="VBoxContainer" parent="all_contents" unique_id=251385729]
 layout_mode = 2
+
+[connection signal="pressed" from="all_contents/header/Button" to="." method="_on_child_add_requested"]

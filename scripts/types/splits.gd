@@ -136,7 +136,7 @@ func apply_setting(setting: String, value: Variant) -> void:
 
 ## Implementation of the `LType` class function.
 static func get_default_config() -> Dictionary[String, Variant]:
-	return _default_config
+	return _default_config.duplicate()
 	
 
 #endregion

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqwi875lf84jv"]
+[gd_scene format=3 uid="uid://cqwi875lf84jv"]
 
 [ext_resource type="Script" uid="uid://cl5nhw0u2m77u" path="res://scripts/menus/layout_settings_menu.gd" id="1_t8ft7"]
 
-[node name="layout_settings_menu" type="HBoxContainer"]
+[node name="layout_settings_menu" type="HBoxContainer" unique_id=1366431883]
 custom_minimum_size = Vector2(400, 300)
 offset_right = 800.0
 offset_bottom = 600.0
@@ -11,51 +11,77 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 script = ExtResource("1_t8ft7")
 
-[node name="left_context_menu" type="MarginContainer" parent="."]
+[node name="left_context_menu" type="MarginContainer" parent="." unique_id=712873568]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="option_list" type="VBoxContainer" parent="left_context_menu"]
+[node name="option_list" type="VBoxContainer" parent="left_context_menu" unique_id=1198151242]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="add_element" type="Button" parent="left_context_menu/option_list"]
+[node name="add_element" type="Button" parent="left_context_menu/option_list" unique_id=2094383006]
 layout_mode = 2
 text = "Add Element"
 
-[node name="remove_element" type="Button" parent="left_context_menu/option_list"]
+[node name="remove_element" type="Button" parent="left_context_menu/option_list" unique_id=2082695284]
 layout_mode = 2
 text = "Remove Element"
 
-[node name="move_up" type="Button" parent="left_context_menu/option_list"]
+[node name="move_up" type="Button" parent="left_context_menu/option_list" unique_id=2031378315]
 layout_mode = 2
 text = "Move Up"
 
-[node name="move_down" type="Button" parent="left_context_menu/option_list"]
+[node name="move_down" type="Button" parent="left_context_menu/option_list" unique_id=491935287]
 layout_mode = 2
 text = "Move Down"
 
-[node name="separator" type="Control" parent="left_context_menu/option_list"]
+[node name="separator" type="Control" parent="left_context_menu/option_list" unique_id=2114325042]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
-[node name="layout_settings" type="Button" parent="left_context_menu/option_list"]
+[node name="layout_settings" type="Button" parent="left_context_menu/option_list" unique_id=1712057321]
 layout_mode = 2
 text = "Layout Settings"
 
-[node name="clear_layout" type="Button" parent="left_context_menu/option_list"]
+[node name="clear_layout" type="Button" parent="left_context_menu/option_list" unique_id=918577231]
 layout_mode = 2
 text = "Clear Layout"
 
-[node name="right_bg" type="ColorRect" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="left_context_menu" unique_id=444453531]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="save_layout" type="Button" parent="left_context_menu/VBoxContainer" unique_id=1117768662]
+layout_mode = 2
+text = "Save Layout"
+
+[node name="save_layout_as" type="Button" parent="left_context_menu/VBoxContainer" unique_id=2031869134]
+layout_mode = 2
+text = "Save Layout As"
+
+[node name="load_layout" type="Button" parent="left_context_menu/VBoxContainer" unique_id=34941841]
+layout_mode = 2
+text = "Load Layout"
+
+[node name="separator" type="Control" parent="left_context_menu/VBoxContainer" unique_id=177249582]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="exit" type="Button" parent="left_context_menu/VBoxContainer" unique_id=318863634]
+layout_mode = 2
+text = "Exit
+"
+
+[node name="right_bg" type="ColorRect" parent="." unique_id=515792488]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.5229999, 0.5229999, 0.5229999, 1)
 
-[node name="bg_margin" type="MarginContainer" parent="right_bg"]
+[node name="bg_margin" type="MarginContainer" parent="right_bg" unique_id=66117577]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,11 +93,11 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 20
 
-[node name="inner_menu" type="ColorRect" parent="right_bg/bg_margin"]
+[node name="inner_menu" type="ColorRect" parent="right_bg/bg_margin" unique_id=811111538]
 layout_mode = 2
 color = Color(0.7362823, 0.7362823, 0.7362822, 1)
 
-[node name="menu_margin" type="MarginContainer" parent="right_bg/bg_margin/inner_menu"]
+[node name="menu_margin" type="MarginContainer" parent="right_bg/bg_margin/inner_menu" unique_id=1041369089]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,9 +109,9 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 6
 
-[node name="menu_list" type="VBoxContainer" parent="right_bg/bg_margin/inner_menu/menu_margin"]
+[node name="menu_list" type="VBoxContainer" parent="right_bg/bg_margin/inner_menu/menu_margin" unique_id=497545625]
 layout_mode = 2
 
-[node name="settings_list" type="TabContainer" parent="right_bg/bg_margin/inner_menu/menu_margin"]
+[node name="settings_list" type="TabContainer" parent="right_bg/bg_margin/inner_menu/menu_margin" unique_id=1383214671]
 visible = false
 layout_mode = 2

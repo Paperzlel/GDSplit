@@ -41,3 +41,7 @@ text = "Move Down"
 [node name="remove_button" type="Button" parent="button_options" unique_id=1784853966]
 layout_mode = 2
 text = "Remove"
+
+[connection signal="pressed" from="button_options/move_up_button" to="." method="_on_move_up_pressed"]
+[connection signal="pressed" from="button_options/move_down_button" to="." method="_on_move_down_pressed"]
+[connection signal="pressed" from="button_options/remove_button" to="." method="_on_remove_pressed"]

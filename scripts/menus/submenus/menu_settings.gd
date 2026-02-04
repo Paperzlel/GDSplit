@@ -14,9 +14,9 @@ func _ready() -> void:
 	# Set each setting corresponding to the value held by the shared config.
 	# If the setting points incorrectly, then warn about it not existing.
 	# May cause issues in the future if update improperly.
-	var cfg_dict: Dictionary[String, Variant] = cfg.get_serialized_data()
+	var cfg_dict: Dictionary[String, Variant] = cfg.get_config()
 	for c: LOptionItem in get_children():
-		if cfg_dict.get(c.setting) == null:
+		if !cfg_dict.has(c.setting):
 			push_error("Timer setting \"" + c.setting + "\" does not exist.")
 			continue
 		c.set_item_value(cfg_dict[c.setting])

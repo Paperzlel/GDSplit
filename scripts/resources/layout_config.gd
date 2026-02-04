@@ -27,6 +27,17 @@ var _type: Globals.ElementType = Globals.ElementType.TYPE_MAX
 func get_serialized_data() -> Dictionary[String, Variant]:
 	if _dict.is_empty():
 		return { "error": "Dictionary data is empty." }
+	return {
+		"config": _dict,
+		"type": _type as int
+	}
+
+
+## Obtains the raw config data as a dictionary. Contains only the settings, and hence
+## no "config" or "type" field is present. Use with care.
+func get_config() -> Dictionary[String, Variant]:
+	if _dict.is_empty():
+		return { "error": "Dictionary data is empty." }
 	return _dict
 
 

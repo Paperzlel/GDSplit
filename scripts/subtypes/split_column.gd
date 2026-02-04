@@ -27,7 +27,5 @@ func setup_column(cfg: Dictionary, parent: LSplits) -> void:
 	# Set title only if it's not empty to avoid false positive
 	if !(cfg["column_label"] as String).is_empty():
 		title_label.name = cfg["column_label"]
-	else:
-		title_label.name = ""
 
 	title_label.visible = parent.show_column_titles
