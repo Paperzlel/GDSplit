@@ -5,8 +5,6 @@ extends VBoxContainer
 var comparison: Globals.ComparisonType = Globals.ComparisonType.CURRENT_COMPARISON
 ## Current delta type used by the column
 var column_type: Globals.DeltaType = Globals.DeltaType.DELTA
-## Show the top of the column
-var show_title: bool = false
 
 ## The title label displayed
 @onready var title_label: Label = $title
@@ -26,6 +24,13 @@ func setup_column(cfg: Dictionary, parent: LSplits) -> void:
 	comparison = cfg["column_comparison"]
 	# Set title only if it's not empty to avoid false positive
 	if !(cfg["column_label"] as String).is_empty():
-		title_label.name = cfg["column_label"]
+		title_label.text = cfg["column_label"]
+	else:
+		title_label.text = ""
 
 	title_label.visible = parent.show_column_titles
+
+
+## Toggles whether to show the title or not. Set by the splits above for consistency.
+func set_show_title(value: bool) -> void:
+	title_label.visible = value

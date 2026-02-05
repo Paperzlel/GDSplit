@@ -161,7 +161,6 @@ func _on_child_remove_requested(child: LOptionItemDictionary) -> void:
 	var pos: int = _child_array.get_children().find(child)
 	_internal_array.remove_at(pos)
 	_child_array.remove_child(child)
-	# TODO: Notify column removal (they don't render right now)
 	child.queue_free()
 	update_values()
 
@@ -170,7 +169,8 @@ func _on_child_add_requested() -> void:
 	var d: Dictionary
 	match array_hint:
 		ArrayHint.HINT_COLUMN:
-			d = LSplitColumn._default_column
+			# ALWAYS DUPLICATE WHEN NEEDING A NEW INSTANCE!!!!!!!!
+			d = LSplitColumn._default_column.duplicate()
 		ArrayHint.HINT_INVALID:
 			d = {}
 	

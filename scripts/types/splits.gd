@@ -90,6 +90,13 @@ func reset_columns() -> void:
 		c.queue_free()
 
 
+## If the visibility of the columns changes, update all columns with the new
+## visibility.
+func update_column_visibility() -> void:
+	for s: LSplitColumn in right_column.get_children():
+		s.set_show_title(show_column_titles)
+
+
 #endregion
 #region Config
 
@@ -109,6 +116,7 @@ func apply_setting(setting: String, value: Variant) -> void:
 			icons_visible = value
 		"show_column_titles":
 			show_column_titles = value
+			call_deferred("update_column_visibility")
 		"last_split_always_at_bottom":
 			last_split_always_at_bottom = value
 		"columns":

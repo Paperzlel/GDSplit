@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b0gl2u40liud6" path="res://scenes/option_items/custom/option_item_enum_delta_type.tscn" id="1_6xb8c"]
 [ext_resource type="Script" uid="uid://bric6hw6rgpgc" path="res://scripts/option_items/custom/option_item_dictionary_column.gd" id="1_oxp17"]
 [ext_resource type="PackedScene" uid="uid://bdp3fbexv647x" path="res://scenes/option_items/custom/option_item_enum_comparison_type.tscn" id="3_wi576"]
+[ext_resource type="PackedScene" uid="uid://dyswraxdf2fjn" path="res://scenes/option_items/option_item_text.tscn" id="4_o6w83"]
 
 [node name="option_item_dictionary_column" type="VBoxContainer" unique_id=603835942]
 offset_right = 40.0
@@ -26,6 +27,10 @@ setting = "column_delta"
 [node name="column_comparison_option" parent="MarginContainer/config_options" unique_id=1348273248 instance=ExtResource("3_wi576")]
 layout_mode = 2
 setting = "column_comparison"
+
+[node name="column_label_option" parent="MarginContainer/config_options" unique_id=1852601080 instance=ExtResource("4_o6w83")]
+layout_mode = 2
+setting = "column_label"
 
 [node name="button_options" type="HBoxContainer" parent="." unique_id=1385347247]
 layout_mode = 2

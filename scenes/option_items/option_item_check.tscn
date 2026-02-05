@@ -1,20 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3anvab6v5mqh"]
+[gd_scene format=3 uid="uid://b3anvab6v5mqh"]
 
 [ext_resource type="Script" uid="uid://bou75bo1fr6nf" path="res://scripts/option_items/option_item_check.gd" id="1_y67ok"]
 
-[node name="option_item_check" type="HSplitContainer"]
-offset_right = 40.0
+[node name="option_item_check" type="HSplitContainer" unique_id=1979370082]
+offset_right = 81.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
-split_offset = 300
+split_offsets = PackedInt32Array(300)
 dragging_enabled = false
+split_offset = 300
 script = ExtResource("1_y67ok")
 
-[node name="name" type="Label" parent="."]
+[node name="name" type="Label" parent="." unique_id=305310612]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1524815626]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer" unique_id=1017438355]
 layout_mode = 2
