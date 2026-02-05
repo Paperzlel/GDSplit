@@ -5,39 +5,41 @@
 [ext_resource type="PackedScene" uid="uid://b3anvab6v5mqh" path="res://scenes/option_items/option_item_check.tscn" id="3_1vk44"]
 [ext_resource type="PackedScene" uid="uid://cw36ks1rok3m" path="res://scenes/option_items/option_item_array.tscn" id="4_8n6eq"]
 
-[node name="menu_split_settings" type="VBoxContainer" unique_id=1760433600]
+[node name="menu_split_settings" type="ScrollContainer" unique_id=550465410]
 offset_right = 400.0
 offset_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_stmel")
 
-[node name="visible_splits_setting" parent="." unique_id=2070861602 instance=ExtResource("1_nomus")]
+[node name="list" type="VBoxContainer" parent="." unique_id=1967242484]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="visible_splits_setting" parent="list" unique_id=2070861602 instance=ExtResource("1_nomus")]
 layout_mode = 2
 split_offsets = PackedInt32Array(300)
 setting = "visible_splits"
 
-[node name="splits_until_move_setting" parent="." unique_id=931698384 instance=ExtResource("1_nomus")]
+[node name="splits_until_move_setting" parent="list" unique_id=931698384 instance=ExtResource("1_nomus")]
 layout_mode = 2
 split_offsets = PackedInt32Array(300)
 setting = "splits_until_move"
 
-[node name="show_icons_setting" parent="." unique_id=743111840 instance=ExtResource("3_1vk44")]
+[node name="show_icons_setting" parent="list" unique_id=743111840 instance=ExtResource("3_1vk44")]
 layout_mode = 2
-split_offsets = PackedInt32Array(300)
 setting = "show_icons"
 
-[node name="show_column_titles_setting" parent="." unique_id=706366866 instance=ExtResource("3_1vk44")]
+[node name="show_column_titles_setting" parent="list" unique_id=706366866 instance=ExtResource("3_1vk44")]
 layout_mode = 2
-split_offsets = PackedInt32Array(300)
 setting = "show_column_titles"
 
-[node name="last_split_always_at_bottom_setting" parent="." unique_id=897282586 instance=ExtResource("3_1vk44")]
+[node name="last_split_always_at_bottom_setting" parent="list" unique_id=897282586 instance=ExtResource("3_1vk44")]
 layout_mode = 2
-split_offsets = PackedInt32Array(300)
 setting = "last_split_always_at_bottom"
 
-[node name="option_item_array" parent="." unique_id=2026357834 instance=ExtResource("4_8n6eq")]
+[node name="option_item_array" parent="list" unique_id=2026357834 instance=ExtResource("4_8n6eq")]
 layout_mode = 2
 array_hint = 0
 setting = "columns"

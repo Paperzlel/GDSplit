@@ -1,10 +1,11 @@
 class_name LMenuSettings
-extends VBoxContainer
+extends ScrollContainer
 
 ## Reference to the current setting that we're editing. Editing the info
 ## on this panel will update the 
 var cfg: LLayoutConfig
 
+@onready var list: VBoxContainer = $"list"
 
 func _ready() -> void:
 	if cfg == null:
@@ -15,7 +16,7 @@ func _ready() -> void:
 	# If the setting points incorrectly, then warn about it not existing.
 	# May cause issues in the future if update improperly.
 	var cfg_dict: Dictionary[String, Variant] = cfg.get_config()
-	for c: LOptionItem in get_children():
+	for c: LOptionItem in list.get_children():
 		if !cfg_dict.has(c.setting):
 			push_error("Timer setting \"" + c.setting + "\" does not exist.")
 			continue

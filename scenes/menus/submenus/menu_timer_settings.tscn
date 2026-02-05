@@ -1,27 +1,36 @@
-[gd_scene load_steps=3 format=3 uid="uid://ddlm8hmrny1du"]
+[gd_scene format=3 uid="uid://ddlm8hmrny1du"]
 
 [ext_resource type="PackedScene" uid="uid://c4hm2ewiyi7uq" path="res://scenes/option_items/option_item_color.tscn" id="1_4v33v"]
 [ext_resource type="Script" uid="uid://5u6m4aqr4xcb" path="res://scripts/menus/submenus/menu_timer_settings.gd" id="1_bn101"]
 
-[node name="menu_timer_settings" type="VBoxContainer"]
+[node name="menu_timer_settings" type="ScrollContainer" unique_id=1373050398]
 offset_right = 400.0
 offset_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_bn101")
 
-[node name="idle_color_setting" parent="." instance=ExtResource("1_4v33v")]
+[node name="list" type="VBoxContainer" parent="." unique_id=360573287]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="idle_color_setting" parent="list" unique_id=959223371 instance=ExtResource("1_4v33v")]
+layout_mode = 2
+split_offsets = PackedInt32Array(300)
 setting = "idle_color"
 
-[node name="playing_color_setting" parent="." instance=ExtResource("1_4v33v")]
+[node name="playing_color_setting" parent="list" unique_id=307690798 instance=ExtResource("1_4v33v")]
 layout_mode = 2
+split_offsets = PackedInt32Array(300)
 setting = "playing_color"
 
-[node name="paused_color_setting" parent="." instance=ExtResource("1_4v33v")]
+[node name="paused_color_setting" parent="list" unique_id=722526880 instance=ExtResource("1_4v33v")]
 layout_mode = 2
+split_offsets = PackedInt32Array(300)
 setting = "paused_color"
 
-[node name="finished_color_setting" parent="." instance=ExtResource("1_4v33v")]
+[node name="finished_color_setting" parent="list" unique_id=1551960967 instance=ExtResource("1_4v33v")]
 layout_mode = 2
+split_offsets = PackedInt32Array(300)
 setting = "finished_color"
