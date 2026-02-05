@@ -25,9 +25,16 @@ var _paused_color: Color = Color.DARK_GRAY
 ## Color for the timer when is has finished running
 var _finished_color: Color = Color.SKY_BLUE
 
+## Lambda for whenever we need to set color but we are still waiting on being
+## added to the scene tree
+var set_color: Callable = func(color): time_label.self_modulate = color
+
 func set_timer_colour(colour: Color) -> void:
 	if time_label != null:
 		time_label.self_modulate = colour
+	else:
+		# Assume the label is awaiting entering the tree
+		set_color.call_deferred(colour)
 
 
 func _on_time_updated(time_ms: int) -> void:
@@ -68,6 +75,8 @@ func save_config() -> Dictionary:
 
 ## Implementation of the `LType` class function.
 func apply_setting(setting: String, value: Variant) -> void:
+	if typeof(value) == TYPE_STRING:
+		value = Globals.string_to_color(value)
 	match setting:
 		"idle_color":
 			_idle_color = value

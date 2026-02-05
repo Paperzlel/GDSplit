@@ -1,10 +1,17 @@
 extends Node
 
+## Emitted whenever the layout has been updated via means other than the
+## layout settings menu.
+signal layout_updated
+## Emitted whenever the layout needs to have all corresponding data removed.
+signal layout_cleared
+
 
 @onready var contents_node: LContentsPanel = $"/root/contents"
 
 ## Layout metadata
 ## - Version number
+## - Data type
 ## - contents[
 ## - ...
 ## - ]
@@ -25,7 +32,8 @@ var _default_contents: Array[Dictionary] = [
 ## Default settings.
 var _default_layout: Dictionary = {
 	"version": Globals.version_str,
-	"contents": _default_contents # Needed to get typed arrays working.
+	"contents": _default_contents, # Needed to get typed arrays working.
+	"type": "layout",
 }
 
 ## Private dictionary containing our metadata for the layout. Contains theme
@@ -84,12 +92,15 @@ func add_config_data_at(idx: int, d: LLayoutConfig) -> void:
 ## Loads the default layout. We know what contents exist already so we can
 ## skip reading the data safely and It Just Works.
 func load_default_layout() -> void:
-	_layout_metadata = _default_layout
+	layout_cleared.emit()
+	_layout_metadata = _default_layout.duplicate(true)
 	# Set contents node, order can change sometimes
 	if contents_node == null:
 		contents_node = $"/root/contents"
+	layout_contents[0] = Dictionary(layout_contents[0], TYPE_STRING, "", null, TYPE_NIL, "", null)
 	add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(layout_contents[0]))
-	print_verbose("Default layout loaded.")
+	print_verbose("Default layout loaded.")#
+	layout_updated.emit()
 
 
 ## Takes the dictionary created from JSON and attempts to read it back into 
@@ -97,33 +108,43 @@ func load_default_layout() -> void:
 ## tells the user and returns false.
 func load_layout_from_dictionary(dict: Dictionary) -> bool:
 	Globals.check_and_update_if_needed(dict)
-	
-	var contents: Array[Dictionary] = dict.get("contents")
-	# Sanity-check config
-	if contents == null:
-		push_error("Failed to obtain the split contents, unable to load layout.")
+
+	if dict.has("type") and dict["type"] != "layout":
+		OS.alert("Attempted to load an invalid layout file. Layout will not be loaded.")
 		return false
+
+	if !dict.has("contents"):
+		OS.alert("Invalid JSON. Layout will not be loaded.")
+		return false
+	
+	# Clear current layout
+	layout_cleared.emit()
+
+	dict["contents"] = Array(dict["contents"], TYPE_DICTIONARY, "", null)
+	var contents: Array[Dictionary] = dict["contents"]
 
 	# Initialize new nodes into the tree from the config
 	for d: Dictionary in contents:
+		d = Dictionary(d, TYPE_STRING, "", null, TYPE_NIL, "", null)
 		add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(d))
 
 	# Parsing went well, we can use the layout metadata. All references to sub-data
 	# remain constant, 
 	_layout_metadata = dict
-
+	layout_updated.emit()
 	return true 
 
 
-## Saves the layout metadata to the current file. Does not currently function
-## properly. TODO: Implement properly
-func save_layout_metadata(cfg: Dictionary) -> void:
-	if !DirAccess.dir_exists_absolute(Globals._current_save_path):
-		OS.alert("The path to save the file at is invalid.", "Invalid Save Path")
-	else:
-		var fa: FileAccess = FileAccess.open(Globals._current_save_path + "/" + 
-				Globals._current_save_name + ".json", FileAccess.WRITE)
-		fa.store_string(JSON.stringify(cfg, "\t"))
+## Saves the current layout metadata to a given path.
+func save_layout_to_path(path: String) -> void:
+	var fa: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if fa == null:
+		OS.alert("Failed to create file at the given directory \"" + path + "\".")
+		return
+	
+	var data: String = JSON.stringify(_layout_metadata, "\t")
+	fa.store_line(data)
+	fa.close()
 
 #endregion
 #region Misc functions

@@ -10,21 +10,21 @@ extends Control
 var config: LLayoutConfig = null
 
 @abstract 
-func save_config() -> Dictionary
+func save_config() -> Dictionary[String, Variant]
 
 @abstract
 func apply_setting(setting: String, value: Variant) -> void
 
 func post_creation() -> void:
-    var settings: Dictionary[String, Variant] = config.get_config()
-    for c: String in settings:
-        apply_setting(c, settings[c])
+	var settings: Dictionary[String, Variant] = config.get_config()
+	for c: String in settings:
+		apply_setting(c, settings[c])
 
 
 static func get_default_config() -> Dictionary[String, Variant]:
-    return {}
+	return {}
 
 
 func _ready() -> void:
-    if config != null:
-        config.setting_changed.connect(apply_setting)
+	if config != null:
+		config.setting_changed.connect(apply_setting)

@@ -1,5 +1,6 @@
 extends Node
 
+
 ## Signal for when the timer has began running
 signal timer_began
 ## Signal for when the timer has been paused
@@ -13,10 +14,12 @@ signal timer_reset
 ## Signal for when the split ID is incremented
 signal split_incremented(counter: int)
 
+
 ## Handle to the root window class
 @onready var window: Window = $/root
 ## Script that is attached to the root window on startup
 @onready var main_window_script = preload("res://scripts/main_window.gd")
+
 
 ## Global enumerations
 
@@ -78,6 +81,24 @@ enum ElementType
 }
 
 
+## Enum describing what we are accessing the filesystem for.
+## Since we access for either splits or for layouts, we need this enum
+## over the defaults in FileDialog.
+enum AccessMode {
+	## Invalid option, shouldn't happen. This occuring is indicative of
+	## an error in the code.
+	FILE_INVALID,
+	## Opening a splits file
+	FILE_OPEN_SPLITS,
+	## Opening a layout file
+	FILE_OPEN_LAYOUT,
+	## Saving a splits file
+	FILE_SAVE_SPLITS,
+	## Saving a layout file
+	FILE_SAVE_LAYOUT
+}
+
+
 ## Global variables
 
 ## The version in a string format
@@ -85,9 +106,50 @@ var version_str: String = "0.1.0"
 ## The path used to load the config file.
 var config_path: String = "user://config.json"
 
+
+## Global private variables
+
+## FileDialog object we interact with here, attached to the root node for simplicity.
+var _fd: FileDialog
+## The access enum we want to use for our file. Update whenever changing from
+## layouts to splits and vice versa. It should NEVER read `FILE_INVALID` when
+## a file has been selected.
+var _access_mode: AccessMode = AccessMode.FILE_INVALID
+
+
 # var _current_save_path: String = ""
 # var _current_save_name: String = ""
 
+#region File Access
+
+
+## Opens the file dialog for a given access mode. The access mode determines
+## whether to read or write files, and what kind of file to expect.
+func open_fa_with(am: AccessMode) -> void:
+	_fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE if am < AccessMode.FILE_SAVE_SPLITS else FileDialog.FILE_MODE_SAVE_FILE
+	_access_mode = am
+	_fd.show()
+	_fd.grab_focus()
+
+
+## Called whenever the file dialog has had a file selected, and we want to load it.
+## `path` can be any valid FS path.
+func _on_file_dialog_file_selected(path: String) -> void:
+	var fa: FileAccess = FileAccess.open(path, FileAccess.READ_WRITE)
+	match _access_mode:
+		AccessMode.FILE_OPEN_SPLITS:
+			SplitMetadata.parse_file_metadata(JSON.parse_string(fa.get_as_text()))
+		AccessMode.FILE_OPEN_LAYOUT:
+			LayoutMetadata.load_layout_from_dictionary(JSON.parse_string(fa.get_as_text()))
+		AccessMode.FILE_SAVE_SPLITS:
+			pass
+		AccessMode.FILE_SAVE_LAYOUT:
+			LayoutMetadata.save_layout_to_path(path)
+		AccessMode.FILE_INVALID:
+			push_error("File access was requested without setting access_mode.")
+
+
+#endregion
 #region Version checking
 
 
@@ -115,6 +177,66 @@ func check_and_update_if_needed(file: Dictionary) -> void:
 
 
 #endregion
+#region Enum type conversion
+
+
+## Converts a value from the `ElementType` enum to a String.
+func element_type_to_string(type: ElementType) -> String:
+	var ret: String = ElementType.keys()[type] as String
+	ret = ret.to_lower().right(-5)
+	ret[0] = ret[0].to_upper()
+	return ret
+
+
+## Converts a string into the `ElementType`. Used only for conversion reasons
+## and is NOT as intelligent as it sounds.
+func string_to_element_type(input_str: String) -> ElementType:
+	input_str = "TYPE_" + input_str.to_upper()
+	return ElementType.get(input_str)
+
+
+## Converts a `DeltaType` to a string
+func delta_type_to_string(type: DeltaType) -> String:
+	var ret: String = DeltaType.keys()[type] as String
+	return _key_to_string(ret)
+
+
+## Converts a string to a `DeltaType`
+func string_to_delta_type(input_str: String) -> DeltaType:
+	input_str = input_str.to_upper().replace(" ", "_")
+	return DeltaType.get(input_str)
+
+
+## Converts a `ComparisonType` to a string
+func comparison_type_to_string(type: ComparisonType) -> String:
+	var ret: String = ComparisonType.keys()[type] as String
+	return _key_to_string(ret)
+
+
+## Converts a string to a `ComparisonType`
+func string_to_comparison_type(input_str: String) -> ComparisonType:
+	input_str = input_str.to_upper().replace(" ", "_")
+	return ComparisonType.get(input_str)
+
+
+func _key_to_string(key: String) -> String:
+	var ret_cpy: String = key
+	key = key.to_lower()
+
+	key[0] = key[0].to_upper()
+	var i: int = ret_cpy.find("_")
+	var total: int = 0
+	while i != -1:
+		i += 1
+		total += i
+		key[total] = key[total].to_upper()
+		ret_cpy = ret_cpy.right(-i)
+		i = ret_cpy.find("_")
+	key = key.replace("_", " ")
+	return key
+
+
+#endregion
 #region Helper functions
 
 
@@ -139,6 +261,7 @@ func create_new_ltype(cfg: LLayoutConfig) -> LType:
 	return ret
 
 
+## Creates a new layout config from the given type.
 func create_new_layout_config(type: ElementType) -> LLayoutConfig:
 	var ret: LLayoutConfig
 	match type:
@@ -153,66 +276,26 @@ func create_new_layout_config(type: ElementType) -> LLayoutConfig:
 	return ret
 
 
-func create_new_layout_config_from_dictionary(d: Dictionary) -> LLayoutConfig:
+## Creates a new layout configuration based on the given dictionary.
+func create_new_layout_config_from_dictionary(d: Dictionary[String, Variant]) -> LLayoutConfig:
 	var ret: LLayoutConfig = create_new_layout_config(d["type"])
+	# Force typing if it's not occured yet
+	if !(d["config"] as Dictionary).is_typed():
+		d["config"] = Dictionary(d["config"], TYPE_STRING, "", null, TYPE_NIL, "", null)
 	ret._dict = d["config"]
 	return ret
 
 
-#endregion
-#region Enum type conversion
-
-
-## Converts a value from the `ElementType` enum to a String.
-func element_type_to_string(type: ElementType) -> String:
-	var ret: String = ElementType.keys()[type] as String
-	ret = ret.to_lower().right(-5)
-	ret[0] = ret[0].to_upper()
-	return ret
-
-
-## Converts a string into the `ElementType`. Used only for conversion reasons
-## and is NOT as intelligent as it sounds.
-func string_to_element_type(input_str: String) -> ElementType:
-	input_str = "TYPE_" + input_str.to_upper()
-	return ElementType.get(input_str)
-
-
-func delta_type_to_string(type: DeltaType) -> String:
-	var ret: String = DeltaType.keys()[type] as String
-	return _key_to_string(ret)
-
-
-func string_to_delta_type(input_str: String) -> DeltaType:
-	input_str = input_str.to_upper().replace(" ", "_")
-	return DeltaType.get(input_str)
-
-
-func comparison_type_to_string(type: ComparisonType) -> String:
-	var ret: String = ComparisonType.keys()[type] as String
-	return _key_to_string(ret)
-
-
-func string_to_comparison_type(input_str: String) -> ComparisonType:
-	input_str = input_str.to_upper().replace(" ", "_")
-	return ComparisonType.get(input_str)
-
-
-func _key_to_string(key: String) -> String:
-	var ret_cpy: String = key
-	key = key.to_lower()
-
-	key[0] = key[0].to_upper()
-	var i: int = ret_cpy.find("_")
-	var total: int = 0
-	while i != -1:
-		i += 1
-		total += i
-		key[total] = key[total].to_upper()
-		ret_cpy = ret_cpy.right(-i)
-		i = ret_cpy.find("_")
-	key = key.replace("_", " ")
-	return key
+## Converts a string to a Color, because the JSON stored isn't using a proper format
+## in Godot and conversion messes up.
+func string_to_color(s: String) -> Color:
+	s = s.right(-1)
+	s = s.left(-1)
+	var arr: PackedStringArray = s.split(", ")
+	var col: Color
+	for i in range(arr.size()):
+		col[i] = arr[i].to_float()
+	return col
 
 
 #endregion
@@ -221,6 +304,16 @@ func _key_to_string(key: String) -> String:
 
 func _ready() -> void:
 	$"/root".set_script(main_window_script)
+
+	# Create FileDialog and enabled filtering
+	_fd = FileDialog.new()
+	_fd.name = "linuxsplit_fd"
+	_fd.add_filter("*.json")
+	_fd.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
+	_fd.access = FileDialog.ACCESS_FILESYSTEM
+	_fd.size = Vector2i(800, 600)
+	_fd.file_selected.connect(_on_file_dialog_file_selected)
+	$"/root".add_child.call_deferred(_fd)
 
 	# Create the default config file if this is the first time booting the app.
 	if !FileAccess.file_exists(config_path):

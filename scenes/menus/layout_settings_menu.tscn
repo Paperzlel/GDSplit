@@ -115,3 +115,14 @@ layout_mode = 2
 [node name="settings_list" type="TabContainer" parent="right_bg/bg_margin/inner_menu/menu_margin" unique_id=1383214671]
 visible = false
 layout_mode = 2
+
+[connection signal="pressed" from="left_context_menu/option_list/add_element" to="." method="_on_add_element_pressed"]
+[connection signal="pressed" from="left_context_menu/option_list/remove_element" to="." method="_on_remove_element_pressed"]
+[connection signal="pressed" from="left_context_menu/option_list/move_up" to="." method="_on_move_up_pressed"]
+[connection signal="pressed" from="left_context_menu/option_list/move_down" to="." method="_on_move_down_pressed"]
+[connection signal="pressed" from="left_context_menu/option_list/layout_settings" to="." method="_on_layout_settings_toggle_pressed"]
+[connection signal="pressed" from="left_context_menu/option_list/clear_layout" to="." method="_on_clear_layout_pressed"]
+[connection signal="pressed" from="left_context_menu/VBoxContainer/save_layout" to="." method="_on_save_layout_pressed"]
+[connection signal="pressed" from="left_context_menu/VBoxContainer/save_layout_as" to="." method="_on_save_layout_as_pressed"]
+[connection signal="pressed" from="left_context_menu/VBoxContainer/load_layout" to="." method="_on_load_layout_pressed"]
+[connection signal="pressed" from="left_context_menu/VBoxContainer/exit" to="." method="_on_exit_pressed"]

@@ -39,7 +39,9 @@ var _internal_array: Array[Dictionary] = []
 		update_configuration_warnings()
 
 
-
+## Checks to see if the new data has its data appropriately sized. Data passed
+## in must have the same element count as the current data, and if not
+## then it is invalid in its size.
 func check_modifications_against(input: Array[Dictionary]) -> bool:
 	if input == null:
 		push_error("Input passed to LOptionItemArray is null.")
@@ -76,6 +78,7 @@ func rebuild_list() -> void:
 		create_new_child(d)
 
 
+## Creates a new child element and connects the respective signals
 func create_new_child(data: Dictionary) -> void:
 	var new_options: LOptionItemDictionary
 	match array_hint:
@@ -97,16 +100,19 @@ func create_new_child(data: Dictionary) -> void:
 	_child_array.add_child(new_options)
 
 
+## Overrides the `OptionItem` definition.
 func get_item_value() -> Variant:
 	return _internal_array
 
 
+## Overrides the `OptionItem` definition.
 func set_item_value(value: Variant) -> void:
 	# Forcibly type the array. Can make it lose typed-ness
 	value = Array(value, TYPE_DICTIONARY, "", null)
 	array = value
 
 
+## Overrides the `OptionItem` definition.
 func get_option_name_override() -> Label:
 	return $"all_contents/header/name"
 
@@ -170,7 +176,7 @@ func _on_child_add_requested() -> void:
 	match array_hint:
 		ArrayHint.HINT_COLUMN:
 			# ALWAYS DUPLICATE WHEN NEEDING A NEW INSTANCE!!!!!!!!
-			d = LSplitColumn._default_column.duplicate()
+			d = LSplitColumn.default_column.duplicate()
 		ArrayHint.HINT_INVALID:
 			d = {}
 	

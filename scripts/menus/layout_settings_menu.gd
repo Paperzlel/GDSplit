@@ -85,18 +85,9 @@ func move_object_down(object : Control) -> void:
 
 
 func _ready() -> void:
-	# Should have a layout list from the globals by now, create the initial
-	# layout list. 
-	var i: int = 0
-	for d: Dictionary in LayoutMetadata.layout_contents:
-		# Ensure that the resource is shared between objects
-		var lt: LType = LayoutMetadata.get_ltype_from_index(i)
-		var node: LTypeLayoutSettings = new_ltype_layout_settings(lt.config)
-		layout_list.add_child(node)
-		i += 1
-	# We only need to reference it once. Both options get updated whenever
-	# a write occurs. It's the joys of Dictionaries!
-	cached_contents = LayoutMetadata.layout_contents
+	_update_layout_list()
+	LayoutMetadata.layout_updated.connect(_update_layout_list)
+	LayoutMetadata.layout_cleared.connect(_on_clear_layout_pressed)
 
 	# Add all types
 	element_list_popup = PopupMenu.new()
@@ -105,14 +96,6 @@ func _ready() -> void:
 		element_list_popup.add_item(n)
 	add_child(element_list_popup)
 	element_list_popup.index_pressed.connect(_on_new_layout_element_selected)
-
-	# Assign all button presses
-	move_up_button.pressed.connect(_on_move_up_pressed)
-	move_down_button.pressed.connect(_on_move_down_pressed)
-	remove_element_button.pressed.connect(_on_remove_element_pressed)
-	add_element_button.pressed.connect(_on_add_element_pressed)
-	layout_settings_button.pressed.connect(_on_layout_settings_toggle_pressed)
-	clear_layout_button.pressed.connect(_on_clear_layout_pressed)
 
 
 #endregion
@@ -213,8 +196,26 @@ func _on_current_object_list_focused(obj: Control) -> void:
 		n.focus_updated(obj)
 
 
+func _on_exit_pressed() -> void:
+	get_window().visible = false
+
+
+func _on_load_layout_pressed() -> void:
+	Globals.open_fa_with(Globals.AccessMode.FILE_OPEN_LAYOUT)
+
+
+func _on_save_layout_as_pressed() -> void:
+	Globals.open_fa_with(Globals.AccessMode.FILE_SAVE_LAYOUT)
+
+
+func _on_save_layout_pressed() -> void:
+	# TODO: Save automatically
+	Globals.open_fa_with(Globals.AccessMode.FILE_SAVE_LAYOUT)
+
+
 #endregion
 #region Utility functions
+
 
 ## Creates a new class of type `LTypeLayoutSettings` and sets the defaults we
 ## expect to be used. 
@@ -261,5 +262,20 @@ func get_layout_idx(object: Control) -> int:
 	var idx: int = layout_list.get_children().find(object)
 	return idx
 
+
+func _update_layout_list() -> void:
+	_on_clear_layout_pressed() # Should be a standalone function, but hey I'm all for bad practices
+	# Should have a layout list from the globals by now, create the initial
+	# layout list. 
+	var i: int = 0
+	for d: Dictionary in LayoutMetadata.layout_contents:
+		# Ensure that the resource is shared between objects
+		var lt: LType = LayoutMetadata.get_ltype_from_index(i)
+		var node: LTypeLayoutSettings = new_ltype_layout_settings(lt.config)
+		layout_list.add_child(node)
+		i += 1
+	# We only need to reference it once. Both options get updated whenever
+	# a write occurs. It's the joys of Dictionaries!
+	cached_contents = LayoutMetadata.layout_contents
 
 #endregion

@@ -12,13 +12,14 @@ var column_type: Globals.DeltaType = Globals.DeltaType.DELTA
 
 ## The default column layout. Slightly different from the default splits
 ## in that it has no initial label.
-static var _default_column: Dictionary = {
+static var default_column: Dictionary[String, Variant] = {
 	"column_delta": Globals.DeltaType.DELTA,
 	"column_comparison": Globals.ComparisonType.CURRENT_COMPARISON,
 	"column_label": "",
 }
 
 
+## Initialize the column based on the parent config data.
 func setup_column(cfg: Dictionary, parent: LSplits) -> void:
 	column_type = cfg["column_delta"]
 	comparison = cfg["column_comparison"]

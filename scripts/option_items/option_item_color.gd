@@ -29,6 +29,9 @@ func get_item_value() -> Variant:
 
 ## Overrides the `OptionItem` definition.
 func set_item_value(value: Variant) -> void:
+	if typeof(value) == TYPE_STRING:
+		# Assumes string
+		value = Globals.string_to_color(value)
 	color = value
 
 
