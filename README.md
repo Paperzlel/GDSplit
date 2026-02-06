@@ -10,3 +10,7 @@ These missing features include:
 - Global hotkeys: Godot is built in such a way as that inputs are only read when the window is in focus. Implementing this is possible, but it would either require a fork of Godot that has these options or require some other workarounds with GDExtension. Given how important it is for this to work, this feature is a priority once the minimum viable product has been created. This option is flat-out not available to my knowledge on Wayland.
 - SpeedRunsLive integration: I haven't looked into it much and don't really care for it as a feature. Implementation will be done if desired.
 - Modding/Module support: Modding is a high priority but ultimately not a core feature. Once everything else is working, I'll add it.
+
+## To-Do
+- [ ] Fix a bug with element order being desynced for layout settings tab items when inserting a tab item directly below a selected element
+- [ ] Fix alignment of layout settings window being wrong when scaled

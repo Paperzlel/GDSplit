@@ -106,6 +106,9 @@ var version_str: String = "0.1.0"
 ## The path used to load the config file.
 var config_path: String = "user://config.json"
 
+## The dictionary containing the configuration data.
+var config_data: Dictionary
+
 
 ## Global private variables
 
@@ -117,10 +120,17 @@ var _fd: FileDialog
 var _access_mode: AccessMode = AccessMode.FILE_INVALID
 
 
-# var _current_save_path: String = ""
-# var _current_save_name: String = ""
-
 #region File Access
+
+## The latest path set by the user when editing files. Is actually config data
+## to save on memory usage.
+var latest_layout_path: String:
+	get:
+		return config_data["last_layout"]
+	set(value):
+		config_data["last_layout"] = value
+		flush_config_changes()
+		print(value)
 
 
 ## Opens the file dialog for a given access mode. The access mode determines
@@ -132,21 +142,54 @@ func open_fa_with(am: AccessMode) -> void:
 	_fd.grab_focus()
 
 
+## Saves the layout using the latest layout path. If the path is not set, then
+## it acts the same as the user pressing "Save As" instead.
+func autosave_layout() -> void:
+	if latest_layout_path.is_empty():
+		open_fa_with(AccessMode.FILE_SAVE_LAYOUT)
+	else:
+		LayoutMetadata.save_layout_to_path(latest_layout_path)
+
+
+## Obtains the data structure from the given file as a `Dictionary` which can
+## be used by our parsing mechanisms.
+func get_data_from_path(path: String) -> Dictionary:
+	var fa: FileAccess = FileAccess.open(path, FileAccess.READ)
+	var ret: Dictionary = JSON.parse_string(fa.get_as_text())
+	fa.close()
+	return ret
+
+
 ## Called whenever the file dialog has had a file selected, and we want to load it.
 ## `path` can be any valid FS path.
 func _on_file_dialog_file_selected(path: String) -> void:
-	var fa: FileAccess = FileAccess.open(path, FileAccess.READ_WRITE)
+	var data: Dictionary = get_data_from_path(path)
 	match _access_mode:
 		AccessMode.FILE_OPEN_SPLITS:
-			SplitMetadata.parse_file_metadata(JSON.parse_string(fa.get_as_text()))
+			SplitMetadata.parse_file_metadata(data)
 		AccessMode.FILE_OPEN_LAYOUT:
-			LayoutMetadata.load_layout_from_dictionary(JSON.parse_string(fa.get_as_text()))
+			latest_layout_path = path
+			LayoutMetadata.load_layout_from_dictionary(data)
 		AccessMode.FILE_SAVE_SPLITS:
 			pass
 		AccessMode.FILE_SAVE_LAYOUT:
+			# Always update layout path here if files have changed
+			latest_layout_path = path
 			LayoutMetadata.save_layout_to_path(path)
 		AccessMode.FILE_INVALID:
 			push_error("File access was requested without setting access_mode.")
+
+#endregion
+#region Configuration Data
+
+
+## Flushes any changes in our config data to disk.
+func flush_config_changes() -> void:
+	var fa: FileAccess = FileAccess.open(config_path, FileAccess.WRITE)
+	var data: String = JSON.stringify(config_data, "\t")
+	fa.store_string(data)
+	fa.close()
+	print(config_data)
 
 
 #endregion
@@ -304,6 +347,7 @@ func string_to_color(s: String) -> Color:
 
 func _ready() -> void:
 	$"/root".set_script(main_window_script)
+	await get_tree().root.ready
 
 	# Create FileDialog and enabled filtering
 	_fd = FileDialog.new()
@@ -330,34 +374,23 @@ func _ready() -> void:
 	
 	# Read the config from the path if it does in fact exist.
 	var fa: FileAccess = FileAccess.open(config_path, FileAccess.READ)
-	var dict: Dictionary = JSON.parse_string(fa.get_as_text())
+	config_data = JSON.parse_string(fa.get_as_text())
 	fa.close()
-	check_and_update_if_needed(dict)
+	check_and_update_if_needed(config_data)
 	
 	# No previous layouts have been used, load the default.
-	if String(dict["last_layout"]).is_empty():
+	if String(config_data["last_layout"]).is_empty():
 		LayoutMetadata.load_default_layout()
+	else:
+		var data: Dictionary = get_data_from_path(latest_layout_path)
+		LayoutMetadata.load_layout_from_dictionary(data)
 	
 	# No previous splits have been used, 
-	if String(dict["last_file"]).is_empty():
+	if String(config_data["last_file"]).is_empty():
 		return
 
-	# Split file used previously no longer exists, warn.
-	if !FileAccess.file_exists(dict["last_file"]):
-		OS.alert("File \"" + dict["last_file"] + "\" no longer exists.")
-	else:
-		fa = FileAccess.open(config_path, FileAccess.READ)
-		var data_dict: Dictionary = JSON.parse_string(fa.get_as_text())
-		if !SplitMetadata.parse_split_file_metadata(data_dict):
-			OS.alert("Invalid metadata in file " + dict["last_file"] + ", unable to continue.", "Split Parse Error")
 
-	# Layout file used previously no longer exists, warn.
-	if !FileAccess.file_exists(dict["last_layout"]):
-		OS.alert("File \"" + dict["last_file"] + "\" no longer exists.")
-	else:
-		fa = FileAccess.open(config_path, FileAccess.READ)
-		var layout_dict: Dictionary = JSON.parse_string(fa.get_as_text())
-		if !LayoutMetadata.load_layout_from_dictionary(layout_dict):
-			OS.alert("Invalid metadata in file " + dict["last_layout"] + ", unable to continue.", "Layout Parse Error")
+func _exit_tree() -> void:
+	flush_config_changes()
 
 #endregion

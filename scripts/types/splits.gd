@@ -125,7 +125,6 @@ func apply_setting(setting: String, value: Variant) -> void:
 			column_data = value
 			reset_columns.call_deferred()
 			for d: Dictionary in column_data:
-				# TODO: Should return a value of sorts, for tracking it.
 				# Call function as deferred since it needs to wait until this function's
 				# ready to work properly.
 				create_column.call_deferred(d)
@@ -138,8 +137,7 @@ func apply_setting(setting: String, value: Variant) -> void:
 	var h: int = get_theme_font("font").get_height() as int
 	custom_minimum_size.y = h
 	for i in range(splits_visible):
-		# TODO: separation height
-		custom_minimum_size.y += h + 4
+		custom_minimum_size.y += h + (theme.get_constant("separation", "") if theme != null else 4)
 
 
 ## Implementation of the `LType` class function.

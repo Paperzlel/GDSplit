@@ -209,9 +209,7 @@ func _on_save_layout_as_pressed() -> void:
 
 
 func _on_save_layout_pressed() -> void:
-	# TODO: Save automatically
-	Globals.open_fa_with(Globals.AccessMode.FILE_SAVE_LAYOUT)
-
+	Globals.autosave_layout()
 
 #endregion
 #region Utility functions
