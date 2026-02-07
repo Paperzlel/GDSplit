@@ -175,11 +175,12 @@ func _on_new_layout_element_selected(idx: int) -> void:
 	# Append data and update cache (new elements are inserted after the current
 	# focus or at the end if none is selected)
 	var lidx: int = get_layout_idx(current_focus) if current_focus != null else -1
-	var node: LTypeLayoutSettings = new_ltype_layout_settings(cfg)
+	var node: LTypeLayoutSettings = new_ltype_layout_settings(cfg, lidx)
 	if node != null:
 		layout_list.add_child(node)
 		if lidx != -1 and lidx < cached_contents.size():
-			layout_list.move_child(node, lidx + 1)
+			lidx += 1
+			layout_list.move_child(node, lidx)
 		LayoutMetadata.add_config_data_at(lidx, cfg)
 	else:
 		push_error("Layout settings node was null. Unable to add to tree.")
@@ -217,7 +218,7 @@ func _on_save_layout_pressed() -> void:
 
 ## Creates a new class of type `LTypeLayoutSettings` and sets the defaults we
 ## expect to be used. 
-func new_ltype_layout_settings(cfg: LLayoutConfig) -> LTypeLayoutSettings:
+func new_ltype_layout_settings(cfg: LLayoutConfig, focus_pos: int) -> LTypeLayoutSettings:
 	var ret: LTypeLayoutSettings = layout_type_res.instantiate()
 	var type_str: String =  Globals.element_type_to_string(cfg.get_type())
 	ret.type_name = type_str
@@ -227,8 +228,12 @@ func new_ltype_layout_settings(cfg: LLayoutConfig) -> LTypeLayoutSettings:
 	var menu_settings: LMenuSettings = new_lmenu_settings(cfg)
 	if menu_settings != null:
 		settings_list.add_child(menu_settings)
-		settings_list.set_tab_title(settings_list.get_children().find(menu_settings), 
-				Globals.element_type_to_string(menu_settings.cfg.get_type()))
+		if focus_pos != -1 and focus_pos < cached_contents.size():
+			focus_pos += 1
+			settings_list.move_child(menu_settings, focus_pos)
+		elif focus_pos == -1:
+			focus_pos = settings_list.get_children().find(menu_settings)
+		settings_list.set_tab_title(focus_pos, type_str)
 	else:
 		push_error("Unable to create LMenuSettings.")
 		return null
@@ -269,7 +274,7 @@ func _update_layout_list() -> void:
 	for d: Dictionary in LayoutMetadata.layout_contents:
 		# Ensure that the resource is shared between objects
 		var lt: LType = LayoutMetadata.get_ltype_from_index(i)
-		var node: LTypeLayoutSettings = new_ltype_layout_settings(lt.config)
+		var node: LTypeLayoutSettings = new_ltype_layout_settings(lt.config, i)
 		layout_list.add_child(node)
 		i += 1
 	# We only need to reference it once. Both options get updated whenever

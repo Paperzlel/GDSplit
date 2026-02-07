@@ -42,6 +42,7 @@ func _ready() -> void:
 	
 	var menu: Control = (load(scene_path) as PackedScene).instantiate()
 	add_child(menu)
+	print(menu.size)
 	if Vector2i(menu.size) != size:
 		size = menu.size
 

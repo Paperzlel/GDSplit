@@ -12,5 +12,5 @@ These missing features include:
 - Modding/Module support: Modding is a high priority but ultimately not a core feature. Once everything else is working, I'll add it.
 
 ## To-Do
-- [ ] Fix a bug with element order being desynced for layout settings tab items when inserting a tab item directly below a selected element
-- [ ] Fix alignment of layout settings window being wrong when scaled
+- [x] Fix a bug with element order being desynced for layout settings tab items when inserting a tab item directly below a selected element
+- [x] Fix alignment of layout settings window being wrong when scaled
