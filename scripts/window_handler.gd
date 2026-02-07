@@ -21,9 +21,9 @@ enum SubWindowHint {
 
 func _init(hint: SubWindowHint) -> void:
 	transient = true
-	borderless = true
+	borderless = false
 	visible = false
-	initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
+	initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
 	window_hint = hint
 	close_requested.connect(_on_close_requested)
 
@@ -33,6 +33,8 @@ func _ready() -> void:
 	# The content manages itself instead of the window
 	var scene_path: String = ""
 	match window_hint:
+		SubWindowHint.HINT_SPLIT_MENU:
+			scene_path = "res://scenes/menus/split_settings_menu.tscn"
 		SubWindowHint.HINT_LAYOUT_MENU:
 			scene_path = "res://scenes/menus/layout_settings_menu.tscn"
 		SubWindowHint.HINT_OPTION_MENU:
@@ -42,7 +44,6 @@ func _ready() -> void:
 	
 	var menu: Control = (load(scene_path) as PackedScene).instantiate()
 	add_child(menu)
-	print(menu.size)
 	if Vector2i(menu.size) != size:
 		size = menu.size
 

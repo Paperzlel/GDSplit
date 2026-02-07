@@ -1,0 +1,213 @@
+[gd_scene format=3 uid="uid://dvc6ajvovjdiy"]
+
+[ext_resource type="Script" uid="uid://dsoy8ndswhax1" path="res://scripts/menus/split_settings_menu.gd" id="1_j6rnm"]
+[ext_resource type="PackedScene" uid="uid://dm6u4nsnkhrsq" path="res://scenes/split_items/split_item_text.tscn" id="1_xqtyy"]
+
+[node name="split_settings_menu" type="ColorRect" unique_id=1817913682]
+custom_minimum_size = Vector2(800, 600)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.7581918, 0.7581918, 0.7581917, 1)
+script = ExtResource("1_j6rnm")
+
+[node name="contents" type="HBoxContainer" parent="." unique_id=1766168887]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="left_margin" type="MarginContainer" parent="contents" unique_id=627294023]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="contents/left_margin" unique_id=2082003794]
+layout_mode = 2
+
+[node name="settings_list" type="VBoxContainer" parent="contents/left_margin/VBoxContainer" unique_id=1787805224]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="add_split" type="Button" parent="contents/left_margin/VBoxContainer/settings_list" unique_id=991321099]
+layout_mode = 2
+text = "Add Split"
+
+[node name="move_up" type="Button" parent="contents/left_margin/VBoxContainer/settings_list" unique_id=829150649]
+layout_mode = 2
+text = "Move Up"
+
+[node name="move_down" type="Button" parent="contents/left_margin/VBoxContainer/settings_list" unique_id=1709647246]
+layout_mode = 2
+text = "Move Down"
+
+[node name="remove_split" type="Button" parent="contents/left_margin/VBoxContainer/settings_list" unique_id=1168173607]
+layout_mode = 2
+text = "Remove Split"
+
+[node name="separator" type="Control" parent="contents/left_margin/VBoxContainer/settings_list" unique_id=207205443]
+layout_mode = 2
+
+[node name="clear_splits" type="Button" parent="contents/left_margin/VBoxContainer/settings_list" unique_id=511989131]
+layout_mode = 2
+text = "Clear Splits"
+
+[node name="additional_settings_list" type="VBoxContainer" parent="contents/left_margin/VBoxContainer" unique_id=2065170583]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="save_splits" type="Button" parent="contents/left_margin/VBoxContainer/additional_settings_list" unique_id=845519133]
+layout_mode = 2
+text = "Save Splits"
+
+[node name="save_splits_as" type="Button" parent="contents/left_margin/VBoxContainer/additional_settings_list" unique_id=1674871359]
+layout_mode = 2
+text = "Save Splits As"
+
+[node name="load_splits" type="Button" parent="contents/left_margin/VBoxContainer/additional_settings_list" unique_id=1364696755]
+layout_mode = 2
+text = "Load Splits"
+
+[node name="separator" type="Control" parent="contents/left_margin/VBoxContainer/additional_settings_list" unique_id=891292422]
+layout_mode = 2
+
+[node name="exit" type="Button" parent="contents/left_margin/VBoxContainer/additional_settings_list" unique_id=1781460774]
+layout_mode = 2
+text = "Exit"
+
+[node name="right_margin" type="MarginContainer" parent="contents" unique_id=1191795350]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="right_bg" type="ColorRect" parent="contents/right_margin" unique_id=1950951045]
+layout_mode = 2
+color = Color(0.48178947, 0.48178947, 0.48178947, 1)
+
+[node name="right_margin" type="MarginContainer" parent="contents/right_margin/right_bg" unique_id=720811887]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="right_elements" type="VBoxContainer" parent="contents/right_margin/right_bg/right_margin" unique_id=2119259604]
+layout_mode = 2
+
+[node name="game" parent="contents/right_margin/right_bg/right_margin/right_elements" unique_id=2094823359 instance=ExtResource("1_xqtyy")]
+layout_mode = 2
+
+[node name="name" parent="contents/right_margin/right_bg/right_margin/right_elements/game/VBoxContainer" parent_id_path=PackedInt32Array(2094823359, 2140167912) index="0" unique_id=1757254132]
+text = "Game"
+
+[node name="category" parent="contents/right_margin/right_bg/right_margin/right_elements" unique_id=496684496 instance=ExtResource("1_xqtyy")]
+layout_mode = 2
+
+[node name="name" parent="contents/right_margin/right_bg/right_margin/right_elements/category/VBoxContainer" parent_id_path=PackedInt32Array(496684496, 2140167912) index="0" unique_id=1757254132]
+text = "Category"
+
+[node name="split_tabs" type="TabContainer" parent="contents/right_margin/right_bg/right_margin/right_elements" unique_id=1551251312]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+tab_0/title = "Splits"
+tab_1/title = "Settings"
+
+[node name="item_list" type="VBoxContainer" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs" unique_id=234659595]
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_tab_index = 0
+metadata/_tab_name = "Splits"
+
+[node name="header" type="HBoxContainer" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list" unique_id=1560316990]
+layout_mode = 2
+
+[node name="icons" type="Label" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list/header" unique_id=784461666]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Icons"
+horizontal_alignment = 1
+
+[node name="split_names" type="Label" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list/header" unique_id=1254569959]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Split Names"
+horizontal_alignment = 1
+
+[node name="seg_time" type="Label" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list/header" unique_id=1475581235]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Seg. Time"
+horizontal_alignment = 1
+
+[node name="best_time" type="Label" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list/header" unique_id=1581593056]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Best Time"
+horizontal_alignment = 1
+
+[node name="scroll_list" type="ScrollContainer" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list" unique_id=136524166]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="split_list" type="VBoxContainer" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/item_list/scroll_list" unique_id=872124871]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="settings" type="Control" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs" unique_id=2135616248]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+metadata/_tab_name = "Settings"
+
+[node name="waiting_for_1_0" type="Label" parent="contents/right_margin/right_bg/right_margin/right_elements/split_tabs/settings" unique_id=543205521]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -24.5
+offset_right = 159.5
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "This area is currently under construction.
+Thanks for your patience!"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/settings_list/add_split" to="." method="_on_add_split_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/settings_list/move_up" to="." method="_on_move_split_up_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/settings_list/move_down" to="." method="_on_move_split_down_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/settings_list/remove_split" to="." method="_on_remove_split_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/settings_list/clear_splits" to="." method="_on_clear_splits_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/additional_settings_list/save_splits" to="." method="_on_save_splits_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/additional_settings_list/save_splits_as" to="." method="_on_save_splits_as_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/additional_settings_list/load_splits" to="." method="_on_load_splits_pressed"]
+[connection signal="pressed" from="contents/left_margin/VBoxContainer/additional_settings_list/exit" to="." method="_on_exit_pressed"]
+[connection signal="text_changed" from="contents/right_margin/right_bg/right_margin/right_elements/game/VBoxContainer/LineEdit" to="." method="_on_game_line_edit_text_changed"]
+[connection signal="text_changed" from="contents/right_margin/right_bg/right_margin/right_elements/category/VBoxContainer/LineEdit" to="." method="_on_category_line_edit_text_changed"]
+
+[editable path="contents/right_margin/right_bg/right_margin/right_elements/game"]
+[editable path="contents/right_margin/right_bg/right_margin/right_elements/category"]

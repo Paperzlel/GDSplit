@@ -38,9 +38,7 @@ func set_timer_colour(colour: Color) -> void:
 
 
 func _on_time_updated(time_ms: int) -> void:
-	var time_s: int = time_ms / 1000
-	time_ms %= 1000
-	time_label.text = str(time_s) + (".%02d" % (time_ms / 10))
+	time_label.text = Globals.ms_to_time(time_ms, 2)
 
 
 func _on_time_began() -> void:

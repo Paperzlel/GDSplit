@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://darj26wdyu04b"]
+
+[ext_resource type="Script" uid="uid://qklrrit5on14" path="res://scripts/split_items/split_item_list_element.gd" id="1_cupjg"]
+
+[node name="split_item_list_element" type="MarginContainer" unique_id=1313304113]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 0
+script = ExtResource("1_cupjg")
+
+[node name="bg" type="ColorRect" parent="." unique_id=1444911243]
+layout_mode = 2
+color = Color(0, 0.67058825, 0.92156863, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1866800294]
+layout_mode = 2
+
+[node name="set_icon" type="Button" parent="HBoxContainer" unique_id=1620098524]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Set Icon"
+
+[node name="split_name" type="LineEdit" parent="HBoxContainer" unique_id=1763244303]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="seg_time" type="LineEdit" parent="HBoxContainer" unique_id=1478532604]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+caret_blink = true
+
+[node name="best_time" type="LineEdit" parent="HBoxContainer" unique_id=589629377]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+caret_blink = true
+
+[connection signal="gui_input" from="HBoxContainer/set_icon" to="." method="_on_set_icon_gui_input"]
+[connection signal="pressed" from="HBoxContainer/set_icon" to="." method="_on_set_icon_pressed"]
+[connection signal="gui_input" from="HBoxContainer/split_name" to="." method="_on_split_name_gui_input"]
+[connection signal="text_submitted" from="HBoxContainer/split_name" to="." method="_on_split_name_text_submitted"]
+[connection signal="gui_input" from="HBoxContainer/seg_time" to="." method="_on_seg_time_gui_input"]
+[connection signal="text_submitted" from="HBoxContainer/seg_time" to="." method="_on_seg_time_text_submitted"]
+[connection signal="gui_input" from="HBoxContainer/best_time" to="." method="_on_best_time_gui_input"]
+[connection signal="text_submitted" from="HBoxContainer/best_time" to="." method="_on_best_time_text_submitted"]

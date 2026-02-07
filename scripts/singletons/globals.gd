@@ -102,7 +102,7 @@ enum AccessMode {
 ## Global variables
 
 ## The version in a string format
-var version_str: String = "0.1.0"
+var version_str: String = "0.1.1"
 ## The path used to load the config file.
 var config_path: String = "user://config.json"
 
@@ -130,7 +130,16 @@ var latest_layout_path: String:
 	set(value):
 		config_data["last_layout"] = value
 		flush_config_changes()
-		print(value)
+
+
+## The latest split path set by the user when editing files. Shadows actual config
+## data to prevent desyncing bugs
+var latest_split_path: String:
+	get:
+		return config_data["last_splits"]
+	set(value):
+		config_data["last_splits"] = value
+		flush_config_changes()
 
 
 ## Opens the file dialog for a given access mode. The access mode determines
@@ -149,6 +158,13 @@ func autosave_layout() -> void:
 		open_fa_with(AccessMode.FILE_SAVE_LAYOUT)
 	else:
 		LayoutMetadata.save_layout_to_path(latest_layout_path)
+
+
+func autosave_splits() -> void:
+	if latest_split_path.is_empty():
+		open_fa_with(AccessMode.FILE_SAVE_SPLITS)
+	else:
+		SplitMetadata.save_splits_to_path(latest_split_path)
 
 
 ## Obtains the data structure from the given file as a `Dictionary` which can
@@ -198,13 +214,45 @@ func flush_config_changes() -> void:
 
 ## Check to see if the LinuxSplit API version is out of date. 
 ## Update when LinuxSplit changes the API, only on major versions past 1.0.0
-func version_out_of_sync(_version: String) -> bool:
+func version_out_of_sync(version: String) -> bool:
+	if version != version_str:
+		return true
+	
 	return false
 
 
 ## Updates the dictionary from the old version stored in the config
 ## to the new version stored in the binary.
-func update_version(_file: Dictionary) -> void:
+func update_version(file: Dictionary) -> void:
+	if !file.has("type"):
+		# Version 0.1.0 "config" file
+		file["type"] = "config"
+	
+	match file["type"]:
+		"config":
+			update_config_dictionary(file)
+		"layout":
+			update_layout_dictionary(file)
+		"splits":
+			update_splits_dictionary(file)
+		_:
+			OS.alert("Type file exists, but no valid type was found.", "Invalid JSON file!")
+	file["version"] = version_str
+
+
+func update_config_dictionary(d: Dictionary) -> void:
+	if d.has("last_file"):
+		# Version 0.1.0 --> 0.1.1 change from "last_file" to "last_splits"
+		var data: String = d.get("last_file")
+		d.erase("last_file")
+		d["last_splits"] = data
+
+
+func update_layout_dictionary(_d: Dictionary) -> void:
+	pass
+
+
+func update_splits_dictionary(_d: Dictionary) -> void:
 	pass
 
 
@@ -215,7 +263,7 @@ func check_and_update_if_needed(file: Dictionary) -> void:
 		return
 	OS.alert(
 		"File version " + file["version"] + " is out-of-date (current version is " + version_str + "). Performing version update...",
-		"Upgrade Version?")
+		"Version Upgrade Required")
 	update_version(file)
 
 
@@ -277,6 +325,41 @@ func _key_to_string(key: String) -> String:
 		i = ret_cpy.find("_")
 	key = key.replace("_", " ")
 	return key
+
+
+#endregion
+#region MS to Time Conversion
+
+
+## Converts an input of milliseconds into a time string, in the form
+## `hours:minutes:seconds.milliseconds`. `decimal_count` specifies whether
+## to use tenths, hundredths or thousandths to store time.
+func ms_to_time(ms: int, decimal_count: int) -> String:
+	if ms == -1:
+		return "-"
+	
+	var seconds: int = ms / 1000
+	var minutes: int = seconds / 60
+	var hrs: int = minutes / 60
+	ms %= 1000
+	seconds %= 60
+	minutes %= 60
+
+	decimal_count = clamp(decimal_count, 1, 3)
+	# d.p. = 10 ^ (3 - n)
+	var divisor: int = 10 ** (3 - decimal_count)
+
+	var ret: String = ("%0{div}d".format({"div": decimal_count})) % (ms / divisor)
+	if minutes > 0 or hrs > 0:
+		ret = (":%02d." % seconds) + ret
+		if hrs > 0:
+			ret = str(hrs) + (":%02d" % minutes) + ret 
+		else:
+			ret = str(minutes) + ret
+	else:
+		ret = str(seconds) + "." + ret
+
+	return ret
 
 
 #endregion
@@ -365,8 +448,9 @@ func _ready() -> void:
 		
 		var default: Dictionary
 		default["version"] = version_str
-		default["last_file"] = ""
+		default["last_splits"] = ""
 		default["last_layout"] = ""
+		default["type"] = "config"
 
 		n_file.store_string(JSON.stringify(default, "\t"))
 		n_file.close()
@@ -379,15 +463,18 @@ func _ready() -> void:
 	check_and_update_if_needed(config_data)
 	
 	# No previous layouts have been used, load the default.
-	if String(config_data["last_layout"]).is_empty():
+	if latest_layout_path.is_empty():
 		LayoutMetadata.load_default_layout()
 	else:
 		var data: Dictionary = get_data_from_path(latest_layout_path)
 		LayoutMetadata.load_layout_from_dictionary(data)
 	
 	# No previous splits have been used, 
-	if String(config_data["last_file"]).is_empty():
-		return
+	if String(config_data["last_splits"]).is_empty():
+		SplitMetadata.load_default_splits()
+	else:
+		var data: Dictionary = get_data_from_path(latest_split_path)
+		SplitMetadata.load_splits_from_dictionary(data)
 
 
 func _exit_tree() -> void:

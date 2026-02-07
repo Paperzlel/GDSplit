@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dm6u4nsnkhrsq"]
+
+[node name="split_item_text" type="MarginContainer" unique_id=2094823359]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=2140167912]
+layout_mode = 2
+
+[node name="name" type="Label" parent="VBoxContainer" unique_id=1757254132]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=1011765235]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2

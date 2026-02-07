@@ -16,6 +16,8 @@ var option_subwindow: Window
 var layout_settings_subwindow: Window
 ## Reference to the element list subwindow
 var element_list_window: LWindowHandler
+## Reference to the split settings subwindow
+var split_settings_subwindow: Window = null
 
 ## Splitting
 
@@ -166,7 +168,8 @@ func reset_splits() -> void:
 ## appear at the user's cursor, although this is exclusive to
 ## the menu window for the moment.
 func show_subwindow(window: Window) -> void:
-	window.position = DisplayServer.mouse_get_position()
+	if window.borderless:
+		window.position = DisplayServer.mouse_get_position()
 	window.show()
 
 
@@ -200,8 +203,14 @@ func _ready() -> void:
 
 	# Create subwindows and keep them hidden for now
 	option_subwindow = create_subwindow("options_subwindow", LWindowHandler.SubWindowHint.HINT_OPTION_MENU)
+	option_subwindow.borderless = true
+	option_subwindow.initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
 	layout_settings_subwindow = create_subwindow("layout_settings_subwindow", LWindowHandler.SubWindowHint.HINT_LAYOUT_MENU)
-	layout_settings_subwindow.borderless = false
+	split_settings_subwindow = create_subwindow("split_settings_subwindow", LWindowHandler.SubWindowHint.HINT_SPLIT_MENU)
+
+	# Manually set once done, to prevent OS.alert() during startup from 
+	await get_tree().root.ready
+	always_on_top = true
 
 
 
@@ -264,6 +273,8 @@ func _on_contents_resized() -> void:
 func _on_subwindow_open_requested(win_name: String) -> void:
 	win_name += "_subwindow"
 	match win_name:
+		split_settings_subwindow.name:
+			show_subwindow(split_settings_subwindow)
 		layout_settings_subwindow.name:
 			show_subwindow(layout_settings_subwindow)
 		option_subwindow.name:

@@ -99,7 +99,6 @@ func load_default_layout() -> void:
 		contents_node = $"/root/contents"
 	layout_contents[0] = Dictionary(layout_contents[0], TYPE_STRING, "", null, TYPE_NIL, "", null)
 	add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(layout_contents[0]))
-	print_verbose("Default layout loaded.")#
 	layout_updated.emit()
 
 

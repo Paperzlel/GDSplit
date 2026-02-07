@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dcava5wmgkdjc"]
+[gd_scene format=3 uid="uid://dcava5wmgkdjc"]
 
 [ext_resource type="Script" uid="uid://b3ajn6qx8xnrn" path="res://scripts/menus/option_menu.gd" id="1_f02io"]
 
-[node name="option_menu" type="MarginContainer"]
+[node name="option_menu" type="MarginContainer" unique_id=1547932011]
 offset_right = 160.0
 offset_bottom = 185.0
 size_flags_horizontal = 3
@@ -13,37 +13,43 @@ theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 script = ExtResource("1_f02io")
 
-[node name="list" type="VBoxContainer" parent="."]
+[node name="list" type="VBoxContainer" parent="." unique_id=710720677]
 layout_mode = 2
 
-[node name="edit_splits" type="Button" parent="list"]
+[node name="edit_splits" type="Button" parent="list" unique_id=1512850772]
 layout_mode = 2
 text = "Edit Splits"
 
-[node name="open_split_file" type="Button" parent="list"]
+[node name="open_split_file" type="Button" parent="list" unique_id=45112366]
 layout_mode = 2
 text = "Open Split File"
 
-[node name="separator" type="Control" parent="list"]
+[node name="separator" type="Control" parent="list" unique_id=435886623]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
-[node name="edit_layout" type="Button" parent="list"]
+[node name="edit_layout" type="Button" parent="list" unique_id=150846730]
 layout_mode = 2
 text = "Edit Layout"
 
-[node name="open_layout_file" type="Button" parent="list"]
+[node name="open_layout_file" type="Button" parent="list" unique_id=80355470]
 layout_mode = 2
 text = "Open Layout File"
 
-[node name="separator2" type="Control" parent="list"]
+[node name="separator2" type="Control" parent="list" unique_id=1980561843]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
-[node name="options" type="Button" parent="list"]
+[node name="options" type="Button" parent="list" unique_id=409916237]
 layout_mode = 2
 text = "Options"
 
-[node name="exit" type="Button" parent="list"]
+[node name="exit" type="Button" parent="list" unique_id=2004728689]
 layout_mode = 2
 text = "Exit"
+
+[connection signal="pressed" from="list/edit_splits" to="." method="_on_edit_splits_pressed"]
+[connection signal="pressed" from="list/open_split_file" to="." method="_on_open_split_file_pressed"]
+[connection signal="pressed" from="list/edit_layout" to="." method="_on_edit_layout_pressed"]
+[connection signal="pressed" from="list/open_layout_file" to="." method="_on_open_layout_file_pressed"]
+[connection signal="pressed" from="list/exit" to="." method="_on_exit_pressed"]
