@@ -120,12 +120,11 @@ func load_layout_from_dictionary(dict: Dictionary) -> bool:
 	layout_cleared.emit()
 
 	dict["contents"] = Array(dict["contents"], TYPE_DICTIONARY, "", null)
-	var contents: Array[Dictionary] = dict["contents"]
 
 	# Initialize new nodes into the tree from the config
-	for d: Dictionary in contents:
-		d = Dictionary(d, TYPE_STRING, "", null, TYPE_NIL, "", null)
-		add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(d))
+	for i in range(dict["contents"].size()):
+		dict["contents"][i] = Dictionary(dict["contents"][i], TYPE_STRING, "", null, TYPE_NIL, "", null)
+		add_new_node_from_item_dictionary(Globals.create_new_layout_config_from_dictionary(dict["contents"][i]))
 
 	# Parsing went well, we can use the layout metadata. All references to sub-data
 	# remain constant, 

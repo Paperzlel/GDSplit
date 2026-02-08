@@ -29,6 +29,9 @@ signal splits_cleared
 
 var splits_cfgs: Array[LSplit] = []
 
+var last_split: int:
+	get:
+		return splits_cfgs.size() - 1
 
 var splits: Array[Dictionary]:
 	get:
@@ -86,7 +89,7 @@ func _get_metadata_safe(key: String) -> Variant:
 
 
 func add_split() -> void:
-	add_split_at(splits_cfgs.size() - 1 if splits_cfgs.size() > 0 else 0)
+	add_split_at(splits_cfgs.size() if splits_cfgs.size() > 0 else 0)
 
 
 func add_split_at(idx: int) -> void:
@@ -97,7 +100,7 @@ func add_split_at(idx: int) -> void:
 		splits.push_back(split_dict)
 
 	var ls: LSplit = LSplit.new()
-	ls._dict = split_dict
+	ls.set_config(split_dict)
 	if splits_cfgs.size() and idx != -1 and idx < splits_cfgs.size():
 		splits_cfgs.insert(idx, ls)
 	else:
@@ -109,7 +112,7 @@ func add_split_at(idx: int) -> void:
 func add_split_with_dictionary(dict: Dictionary[String, Variant]) -> void:
 	add_split()
 	var ls: LSplit = splits_cfgs[splits_cfgs.size() - 1]
-	ls._dict = dict
+	ls.set_config(dict)
 	ls.name_updated.emit()
 	ls.times_updated.emit()
 	ls.best_time_updated.emit()
@@ -120,9 +123,9 @@ func remove_split_at(idx: int) -> void:
 		push_error("Split index was out of range.")
 		return
 	
-	var s: LSplit = splits_cfgs.pop_at(idx)
-	s.removed.emit(s)
+	splits_cfgs.remove_at(idx)
 	splits.remove_at(idx)
+	print("Removing split " + str(idx))
 	split_removed.emit(idx)
 
 
@@ -142,9 +145,6 @@ func move_split_to(old_idx: int, new_idx: int) -> void:
 
 
 func clear_all_splits() -> void:
-	for s: LSplit in splits_cfgs:
-		s.removed.emit(s)
-	
 	splits_cfgs.clear()
 	splits.clear()
 	splits_cleared.emit()

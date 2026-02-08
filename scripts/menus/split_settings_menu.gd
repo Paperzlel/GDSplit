@@ -53,7 +53,8 @@ func _on_add_split_pressed() -> void:
 			current_focus = null
 			SplitMetadata.add_split()
 		else:
-			SplitMetadata.add_split_at(idx)
+			# Add below current index, moves current node down
+			SplitMetadata.add_split_at(idx + 1)
 	else:
 		# If no focus, append to bottom
 		SplitMetadata.add_split()
@@ -72,7 +73,6 @@ func _on_remove_split_pressed() -> void:
 		return
 	
 	var idx: int = get_current_focus_index()
-	print(idx)
 	if idx == -1:
 		# Don't try to remove an invalid focus, clear it
 		current_focus = null
@@ -117,7 +117,6 @@ func _on_split_added(idx: int) -> void:
 func _on_split_removed(idx: int) -> void:
 	var split_item: LSplitItemListElement = split_list.get_children()[idx]
 	split_list.remove_child(split_item)
-	split_item.cfg.removed.emit()
 	split_item.queue_free()
 
 

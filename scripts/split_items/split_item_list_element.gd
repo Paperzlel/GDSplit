@@ -56,7 +56,7 @@ func _on_set_icon_pressed() -> void:
 func _ready() -> void:
 	bg.color.a = 0
 	split_edit.text = cfg.split_name
-	best_time.text = str(cfg.best_time)
+	best_time.text = Globals.ms_to_time(cfg.best_time, 0)
 
 # Input from child nodes needs to be handled as otherwise it's ignored
 

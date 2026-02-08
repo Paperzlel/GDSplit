@@ -10,9 +10,24 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ea5bg")
 
-[node name="left" type="VBoxContainer" parent="." unique_id=989546812]
+[node name="left_margin" type="MarginContainer" parent="." unique_id=1116374603]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="right" type="HBoxContainer" parent="." unique_id=185137815]
+[node name="left" type="VBoxContainer" parent="left_margin" unique_id=989546812]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="bottom" type="VBoxContainer" parent="left_margin" unique_id=1449187790]
+layout_mode = 2
+alignment = 2
+
+[node name="right_margin" type="MarginContainer" parent="." unique_id=1572533550]
+layout_mode = 2
+
+[node name="right" type="HBoxContainer" parent="right_margin" unique_id=185137815]
+layout_mode = 2
+
+[node name="bottom" type="HBoxContainer" parent="right_margin" unique_id=2094811312]
+layout_mode = 2
+alignment = 2

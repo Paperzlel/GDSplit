@@ -1,17 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsmaod5drj2qe"]
+[gd_scene format=3 uid="uid://bsmaod5drj2qe"]
 
 [ext_resource type="Script" uid="uid://dy68mocjqtw4v" path="res://scripts/subtypes/split_left_row.gd" id="1_p5fyg"]
 
-[node name="split_left_row" type="HBoxContainer"]
+[node name="split_left_row" type="HBoxContainer" unique_id=176031999]
 offset_right = 5.0
 offset_bottom = 23.0
 size_flags_horizontal = 3
 script = ExtResource("1_p5fyg")
 
-[node name="icon" type="TextureRect" parent="."]
+[node name="icon" type="TextureRect" parent="." unique_id=1871479700]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="name" type="Label" parent="."]
+[node name="name" type="Label" parent="." unique_id=1515421570]
 layout_mode = 2
 size_flags_horizontal = 3

@@ -9,8 +9,6 @@ signal name_updated
 signal times_updated
 signal best_time_updated
 
-signal removed(obj: LSplit)
-
 var _dict: Dictionary[String, Variant]
 
 var split_name: String:
@@ -33,3 +31,9 @@ var best_time: int:
 	set(value):
 		_dict["best_time"] = value
 		best_time_updated.emit()
+
+
+func set_config(d: Dictionary) -> void:
+	d = Dictionary(d, TYPE_STRING, "", null, TYPE_NIL, "", null)
+	_dict = d
+	_dict["times"] = Dictionary(_dict["times"], TYPE_STRING, "", null, TYPE_INT, "", null)
