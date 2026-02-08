@@ -1,4 +1,4 @@
-class_name SplitsLeftRow
+class_name LSplitsLeftRow
 extends HBoxContainer
 
 ## The split icon location

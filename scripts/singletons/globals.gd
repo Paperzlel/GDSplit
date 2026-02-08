@@ -109,6 +109,7 @@ var config_path: String = "user://config.json"
 ## The dictionary containing the configuration data.
 var config_data: Dictionary
 
+var global_comparison: ComparisonType = ComparisonType.PERSONAL_BEST
 
 ## Global private variables
 

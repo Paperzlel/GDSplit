@@ -39,6 +39,10 @@ var splits: Array[Dictionary]:
 	set(value):
 		_split_metadata["splits"] = value
 
+var pb_id: String:
+	get:
+		return _split_metadata["personal_best_id"]
+
 var game_name: String:
 	get:
 		return _get_metadata_safe("game")

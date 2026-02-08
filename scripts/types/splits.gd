@@ -95,24 +95,54 @@ func _redraw_on_change() -> void:
 
 	# Clear left column
 	while left_column.get_child_count() > 0:
-		var s: SplitsLeftRow = left_column.get_child(0)
+		var s: LSplitsLeftRow = left_column.get_child(0)
 		left_column.remove_child(s)
 		s.queue_free()
 	
 	# Clear bottom row if it exists
 	if lb_column.get_child_count() > 0:
-		var s: SplitsLeftRow = lb_column.get_child(0)
+		var s: LSplitsLeftRow = lb_column.get_child(0)
 		lb_column.remove_child(s)
 		s.queue_free()
+	
+	# Clear right columns
+	for c: Node in right_column.get_children():
+		c = c as LSplitColumn
+		if c == null:
+			continue
+		
+		while c.get_child_count() > 1:
+			var r: LSplitsRightRow = c.get_child(1)
+			c.remove_child(r)
+			r.queue_free()
+	
+	for c: Node in rb_column.get_children():
+		c = c as VBoxContainer
+		if c == null:
+			continue
+		
+		while c.get_child_count() > 0:
+			var r: LSplitsRightRow = c.get_child(0)
+			c.remove_child(r)
+			r.queue_free()
 
 	for i in range(min(splits_visible, SplitMetadata.split_count)):
-		var s: SplitsLeftRow = split_row_res.instantiate()
-		s.cfg = SplitMetadata.splits_cfgs[_relative_to_abs(i)]
+		var s: LSplitsLeftRow = split_row_res.instantiate()
+		var cfg: LSplit = SplitMetadata.splits_cfgs[_relative_to_abs(i)]
+		s.cfg = cfg
 		left_column.add_child(s)
+
+		for c: Node in right_column.get_children():
+			c = c as LSplitColumn
+			if c == null:
+				continue
+			
+			var r: LSplitsRightRow = LSplitsRightRow.new(cfg, c.comparison, c.column_type, i)
+			c.add_child(r)
 	
 	# Move to bottom row if needed
 	if last_split_always_at_bottom:
-		var l: SplitsLeftRow = null
+		var l: LSplitsLeftRow = null
 		if splits_visible >= SplitMetadata.split_count:
 			l = left_column.get_child(SplitMetadata.split_count - 1)
 			left_column.remove_child(l)
@@ -120,6 +150,27 @@ func _redraw_on_change() -> void:
 			l = split_row_res.instantiate()
 			l.cfg = SplitMetadata.splits_cfgs[SplitMetadata.split_count - 1]
 		lb_column.add_child(l)
+
+		var idx: int = 0
+		for c: Node in rb_column.get_children():
+			c = c as VBoxContainer
+			if c == null:
+				continue
+			
+			var col: LSplitColumn = right_column.get_child(idx) as LSplitColumn
+			var r: LSplitsRightRow = null
+			if splits_visible >= SplitMetadata.split_count:
+				r = col.get_child(SplitMetadata.split_count)
+				col.remove_child(r)
+			else:
+				r = LSplitsRightRow.new(
+					SplitMetadata.splits_cfgs[SplitMetadata.split_count - 1], 
+					col.comparison, 
+					col.column_type,
+					SplitMetadata.split_count - 1
+				)
+			c.add_child(r)
+			idx += 1
 
 
 ## Adds a split into the split row if its index is able to be shown on-screen.
@@ -150,15 +201,7 @@ func move_split(_old_idx: int, _new_idx: int) -> void:
 
 ## Removes all visible splits and subsequently frees them.
 func clear_splits() -> void:
-	var arr: Array[Node] = left_column.get_children()
-	for c: Node in arr:
-		c = c as SplitsLeftRow
-		if c == null:
-			continue
-		
-		left_column.remove_child(c)
-		c.queue_free()
-	# TODO: Clear right column(s)
+	_redraw_on_change()
 
 
 ## Called whenever the range of split values to show has been changed.
@@ -174,11 +217,22 @@ func create_column(cfg: Dictionary) -> void:
 	var ret: LSplitColumn = right_column_res.instantiate()
 	right_column.add_child(ret)
 	ret.setup_column(cfg, self)
+	var right: VBoxContainer = VBoxContainer.new()
+	right.custom_minimum_size.x = 40
+	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right.alignment = BoxContainer.ALIGNMENT_END
+	rb_column.add_child(right)
+
+	_redraw_on_change()
 
 
 func reset_columns() -> void:
 	for c: Node in right_column.get_children():
 		right_column.remove_child(c)
+		c.queue_free()
+	for c: Node in rb_column.get_children():
+		rb_column.remove_child(c)
 		c.queue_free()
 
 
