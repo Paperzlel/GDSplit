@@ -29,9 +29,9 @@ signal splits_cleared
 
 var splits_cfgs: Array[LSplit] = []
 
-var last_split: int:
+var split_count: int:
 	get:
-		return splits_cfgs.size() - 1
+		return splits_cfgs.size()
 
 var splits: Array[Dictionary]:
 	get:
