@@ -172,6 +172,8 @@ func autosave_splits() -> void:
 ## be used by our parsing mechanisms.
 func get_data_from_path(path: String) -> Dictionary:
 	var fa: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if fa == null or fa.get_as_text().is_empty():
+		return { }
 	var ret: Dictionary = JSON.parse_string(fa.get_as_text())
 	fa.close()
 	return ret
@@ -183,12 +185,14 @@ func _on_file_dialog_file_selected(path: String) -> void:
 	var data: Dictionary = get_data_from_path(path)
 	match _access_mode:
 		AccessMode.FILE_OPEN_SPLITS:
-			SplitMetadata.parse_file_metadata(data)
+			latest_split_path = path
+			SplitMetadata.load_splits_from_dictionary(data)
 		AccessMode.FILE_OPEN_LAYOUT:
 			latest_layout_path = path
 			LayoutMetadata.load_layout_from_dictionary(data)
 		AccessMode.FILE_SAVE_SPLITS:
-			pass
+			latest_split_path = path
+			SplitMetadata.save_splits_to_path(path)
 		AccessMode.FILE_SAVE_LAYOUT:
 			# Always update layout path here if files have changed
 			latest_layout_path = path
@@ -468,14 +472,22 @@ func _ready() -> void:
 		LayoutMetadata.load_default_layout()
 	else:
 		var data: Dictionary = get_data_from_path(latest_layout_path)
-		LayoutMetadata.load_layout_from_dictionary(data)
+		if data.is_empty():
+			push_error("Failed to get data from path. Loading default instead.")
+			LayoutMetadata.load_default_layout()
+		else:
+			LayoutMetadata.load_layout_from_dictionary(data)
 	
 	# No previous splits have been used, 
 	if String(config_data["last_splits"]).is_empty():
 		SplitMetadata.load_default_splits()
 	else:
 		var data: Dictionary = get_data_from_path(latest_split_path)
-		SplitMetadata.load_splits_from_dictionary(data)
+		if data.is_empty():
+			push_error("Failed to get data from path. Loading default instead.")
+			SplitMetadata.load_default_splits()
+		else:
+			SplitMetadata.load_splits_from_dictionary(data)
 
 
 func _exit_tree() -> void:

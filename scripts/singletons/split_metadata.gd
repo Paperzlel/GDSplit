@@ -97,29 +97,27 @@ func add_split() -> void:
 
 
 func add_split_at(idx: int) -> void:
-	var split_dict: Dictionary[String, Variant] = _default_split.duplicate()
-	if splits.size() > 0 and idx != -1 and idx < splits.size():
-		splits.insert(idx, split_dict)
+	var split_dict: Dictionary[String, Variant]
+	if idx < splits.size() and splits.get(idx) != null:
+		if !splits[idx].is_typed():
+			splits[idx] = Dictionary(splits[idx], TYPE_STRING, "", null, TYPE_NIL, "", null)
+		split_dict = splits[idx]
 	else:
-		splits.push_back(split_dict)
+		split_dict = _default_split.duplicate()
+		if splits.size() > 0 and idx != -1 and idx < splits.size():
+			splits.insert(idx, split_dict)
+		else:
+			splits.push_back(split_dict)
 
 	var ls: LSplit = LSplit.new()
-	ls.set_config(split_dict)
+	ls.set_config(splits[idx])
 	if splits_cfgs.size() and idx != -1 and idx < splits_cfgs.size():
 		splits_cfgs.insert(idx, ls)
 	else:
 		splits_cfgs.push_back(ls)
-
+	
 	split_added.emit(idx)
-
-
-func add_split_with_dictionary(dict: Dictionary[String, Variant]) -> void:
-	add_split()
-	var ls: LSplit = splits_cfgs[splits_cfgs.size() - 1]
-	ls.set_config(dict)
-	ls.name_updated.emit()
-	ls.times_updated.emit()
-	ls.best_time_updated.emit()
+	ls.update()
 
 
 func remove_split_at(idx: int) -> void:
@@ -169,8 +167,12 @@ func load_default_splits() -> void:
 
 ## Parses the split file metadata, and updates if needed.
 func load_splits_from_dictionary(dict: Dictionary) -> bool:
+	if dict.is_empty():
+		push_error("Could not load splits as the data is null.")
+		return false
 	Globals.check_and_update_if_needed(dict)
 
+	dict = Dictionary(dict, TYPE_STRING, "", null, TYPE_NIL, "", null)
 	if dict.has("type") and dict["type"] != "splits":
 		OS.alert("Attempted to load an invalid splits file. Splits will not be loaded.")
 		return false
@@ -185,14 +187,22 @@ func load_splits_from_dictionary(dict: Dictionary) -> bool:
 	# Dictionary is now safe to use, apply metadata
 	_split_metadata = dict
 
-	for d: Dictionary in dict["splits"]:
-		d = Dictionary(d, TYPE_STRING, "", null, TYPE_NIL, "", null)
-		add_split_with_dictionary(d)
+	var sc: int = dict["splits"].size()
+	for i in range(sc):
+		add_split()
 
 	return true
 
 
-func save_splits_to_path(_path: String) -> void:
-	pass
+func save_splits_to_path(path: String) -> void:
+	var fa: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if fa == null:
+		OS.alert("Failed to create file at the given directory \"" + path + "\".")
+		return
+	
+	var data: String = JSON.stringify(_split_metadata, "\t")
+	print(data)
+	fa.store_line(data)
+	fa.close()
 
 #endregion

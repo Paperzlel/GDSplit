@@ -44,6 +44,8 @@ var _layout_metadata: Dictionary
 ## given layout. Overrides `_layout_metadata` internally.
 var layout_contents: Array[Dictionary]:
 	get:
+		if !_layout_metadata.has("contents"):
+			return []
 		return _layout_metadata["contents"] as Array[Dictionary]
 	set(value):
 		_layout_metadata["contents"] = value
@@ -106,6 +108,9 @@ func load_default_layout() -> void:
 ## usable data for us. If a specific section that we need isn't present, it
 ## tells the user and returns false.
 func load_layout_from_dictionary(dict: Dictionary) -> bool:
+	if dict.is_empty():
+		push_error("Could not load layout as the data is null.")
+		return false
 	Globals.check_and_update_if_needed(dict)
 
 	if dict.has("type") and dict["type"] != "layout":

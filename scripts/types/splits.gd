@@ -141,7 +141,7 @@ func _redraw_on_change() -> void:
 			c.add_child(r)
 	
 	# Move to bottom row if needed
-	if last_split_always_at_bottom:
+	if last_split_always_at_bottom and SplitMetadata.split_count > 0:
 		var l: LSplitsLeftRow = null
 		if splits_visible >= SplitMetadata.split_count:
 			l = left_column.get_child(SplitMetadata.split_count - 1)

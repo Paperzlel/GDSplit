@@ -33,7 +33,12 @@ var best_time: int:
 		best_time_updated.emit()
 
 
-func set_config(d: Dictionary) -> void:
-	d = Dictionary(d, TYPE_STRING, "", null, TYPE_NIL, "", null)
+func set_config(d: Dictionary[String, Variant]) -> void:
 	_dict = d
 	_dict["times"] = Dictionary(_dict["times"], TYPE_STRING, "", null, TYPE_INT, "", null)
+
+
+func update() -> void:
+	name_updated.emit()
+	times_updated.emit()
+	best_time_updated.emit()
